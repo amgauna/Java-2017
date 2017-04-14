@@ -1,0 +1,327 @@
+<HTML>
+<body>
+<h1>The JavaScript Object Model</h1>
+
+<p>JavaScript is based on a  simple object-oriented paradigm.  
+An object is a construct with properties that are JavaScript variables.
+Properties can be other objects.  Functions associated with an object are known as the 
+object's <i>methods</i>.
+<P>
+In addition to objects that are built into the Navigator client and the LiveWire server,
+you can define your own objects.
+
+<UL>
+<LI><a href="#objprop">Objects and Properties</a>
+<LI><a href="#funcmeth">Functions and Methods</LI></a>
+<LI><a href="#newobj">Creating New Objects</LI></a>
+</UL>
+
+<a name="objprop"> <h2>Objects and Properties</h2></a>
+
+<p>A JavaScript object has properties associated with it. You access the properties of an 
+object with a simple notation:
+<pre>
+objectName.propertyName
+</pre>
+<p>
+Both the object name and property name are case sensitive. 
+You define a property by assigning it a value. For example, suppose there is an object
+named <i>myCar</i> (we'll discuss how to create objects later-for now, just assume the object
+already exists). You can give it properties named <b>make</b>, <b>model</b>,
+and <b>year</b> as follows: 
+<pre>
+myCar.make = "Ford"
+myCar.model = "Mustang"
+myCar.year = 69;
+</pre>
+
+<p>An array is an ordered set of values associated with a single variable
+name. Properties and arrays in JavaScript are intimately related; in fact,
+they are different interfaces to the same data structure. So, for example, you could access
+the properties of the <i>myCar</i> object described above as follows: 
+<pre>myCar[&quotmake&quot] = &quotFord&quot;
+myCar[&quotmodel&quot] = &quotMustang&quot;
+myCar[&quotyear&quot] = 67;</pre>
+
+<p>Equivalently, each of these elements can be accessed by its index, as
+follows: 
+<pre>myCar[0] = &quotFord&quot;
+myCar[1] = &quotMustang&quot;
+myCar[2] = 67;</pre>
+
+<p>This type of an array is known as an associative array, because each
+index element is also associated with a string value. To illustrate how this works,
+the following function displays the properties of the object, when you
+pass the object and the object's name as arguments to the function: 
+<pre>function show_props(obj, obj_name) { 
+    var result = &quot&quot; 
+    for (var i in obj) 
+        result += obj_name + &quot.&quot + i + &quot = &quot + obj[i] + &quot\n&quot; 
+    return result; 
+} </pre>
+
+<p>So, the function call <tt>show_props(myCar, &quotmyCar&quot)</tt> would
+return the following: 
+<pre>myCar.make = Ford
+myCar.model = Mustang
+myCar.year = 67</pre> 
+
+<!--------------------------------------------------------------------------------------->
+<a name="funcmeth"><h2>Functions and Methods</h2></a>
+<P>
+Functions are one of the fundamental building blocks in JavaScript.
+A function is a JavaScript procedure--a set of statments that performs a specific task.  
+<P>
+A function definition consists of the <b>function</b> keyword, followed by
+<UL>
+<LI>the name of the function 
+<LI>a list of parameters to the function, enclosed in parentheses, and separated by commas
+<LI>the JavaScript statements that define the function, enclosed in curly braces, {...}
+</UL>
+<P>
+In a Navigator application, you can use any functions defined in the current page. 
+It is generally a good idea to define all your functions in the <code>HEAD</code> of a page.
+When a user loads the page, the functions will then be loaded first.  
+
+<P>
+The statements in a function can include other function calls defined for the 
+current application.
+
+<P>
+For example, here is the definition of a simple function named pretty_print:
+<XMP>
+function pretty_print(string) {
+   document.write("<HR><P>" + string)
+}
+</XMP>
+<P>
+This function takes a string as its argument, adds some HTML tags to it using the concatenation 
+operator (+), then displays the result to the current document.
+<P>
+Defining a function does not execute it.
+You have to <i>call</i> the function for it to do its work.
+For example, you could call the pretty_print function as follows:
+<XMP>
+<SCRIPT>
+pretty_print("This is some text to display")
+</SCRIPT>
+</XMP>
+<P>
+The parameters of a function are not limited to just strings and numbers.
+You can pass whole objects to a function, too.
+The show_props function from the previous section is an example of a function that takes 
+an object as an argument.
+<P>
+A function can even be recursive, that is, it can call itself.  For example, here is a function that computes factorials:
+<PRE>
+function factorial(n) {
+  if ((n == 0) || (n == 1))
+    return 1
+  else {
+    result = (n * factorial(n-1) )
+    return result
+  }
+}
+</PRE>
+
+<P>
+You could call this function with an argument of one through five inside a loop as follows:
+<PRE>
+for (x = 0; x < 5; x++) {
+   document.write(x, " factorial is ", factorial(x))
+   document.write("<BR>")
+}
+</PRE>
+<P>
+The results would be:
+<BR>
+0 factorial is 1
+<BR>1 factorial is 1
+<BR>2 factorial is 2
+<BR>3 factorial is 6
+<BR>4 factorial is 24
+<BR>5 factorial is 120
+
+<h3>Methods</h3>
+<P>
+A <i>method</i> is a function associated with an object.  You define a method in the same way
+as you define a standard function.  Then, use the following syntax to associate the function
+with an existing object:
+<pre>
+<i>object.methodname = function_name</i>
+</pre>
+where <i>object</i> is an existing object, <i>methodname</i> is the name you are assigning to
+the method, and <i>function_name</i> is the name of the function.
+<P>
+You can then call the method in the context of the object as follows:
+<pre>
+object.methodname(params);
+</pre>
+
+<h3>Using this for Object References</h3>
+<P>
+JavaScript has a special keyword, <b>this</b>, that you can
+use to refer to the current object.  For example, suppose you have a function called
+<i>validate</i> that validates an object's value property, given the object, and the 
+high and low values:
+<pre>
+function validate(obj, lowval, hival) {
+   if ((obj.value < lowval) || (obj.value > hival))
+      alert("Invalid Value!")
+}
+</pre>
+<P>
+Then, you could call <i>validate</i> in each form element's 
+onChange event handler, using <b>this</b> to pass it the form element, as in the 
+following example:
+
+<xmp>
+<INPUT TYPE = "text" NAME = "age" SIZE = 3 onChange="validate(this, 18, 99)">
+</xmp>
+
+<P>
+In general, in a method <b>this</b> refers to the calling object.
+
+<!--------------------------------------------------------------------------------------->
+<a name="newobj"> <h2>Creating New Objects</h2></a>
+<P>
+Both client and server JavaScript have a number of predefined objects.
+In addition, you can create your own objects.
+Creating your own object requires two steps:
+<UL>
+<LI>Define the object type by writing a function.
+<LI>Create an instance of the object with <b>new</b>.
+</UL>
+<P>
+To define an object type, create a function for the object
+type that specifies its name, and its properties and methods.
+
+For example, suppose you want to create an object type for cars.
+You want this type of object to be called <i>car</i>, and you want it
+to have properties for make, model, year, and color.
+To do this, you would write the following function:
+<PRE>
+function car(make, model, year) {
+   this.make = make; 
+   this.model = model;
+   this.year = year;
+}
+</PRE>
+<P>
+Notice the use of <b>this</b> to assign values to the object's properties based 
+on the values passed to the function.
+<P>
+Now you can create an object called <i>mycar</i> as follows:
+<PRE>
+mycar = new car("Eagle", "Talon TSi", 1993);
+</PRE>
+<P>
+This statement creates <i>mycar</i> and assigns it the specified values for its properties.
+Then the value of <code>mycar.make</code> is the string "Eagle", <code>mycar.year</code>
+is the integer 1993, and so on.
+<P>
+You can create any number of <i>car</i> objects by calls to <b>new</i>.
+For example, 
+<PRE>
+kenscar = new car("Nissan", "300ZX", 1992)
+</PRE>
+<P>
+An object can have a property that is itself another object.
+For example, suppose I define an object called <i>person</i> as follows:
+<PRE>
+function person(name, age, sex) {
+   this.name = name;
+   this.age = age;
+   this.sex = sex;
+}
+</PRE>
+<P>
+And then instantiate two new <i>person</i> objects as follows:
+<PRE>
+rand = new person("Rand McNally", 33, "M")
+ken = new person("Ken Jones", 39, "M")
+</PRE>
+<P>
+Then we can rewrite the definition of <i>car</i> to include an owner property
+that takes a <i>person</I> object, as follows:
+<PRE>
+function car(make, model, year, owner) {
+   this.make = make; 
+   this.model = model;
+   this.year = year;
+   this.owner = owner;
+}
+</PRE>
+<P>
+To instantiate the new objects, you then use the following:
+<PRE>
+car1 = new car("Eagle", "Talon TSi", 1993, rand);
+car2 = new car("Nissan", "300ZX", 1992, ken)
+</PRE>
+<P>
+Notice that instead of passing a literal string or integer value when creating the
+new objects, the above statements pass the objects rand and ken as the parameters for the owners.
+Then if you want to find out the name of the owner of car2, 
+you can access the following property:
+<PRE>
+car2.owner.name
+</PRE>
+<P>
+Note that you can always add a property to a previously defined object.
+For example, the statement:
+<pre>
+car1.color = "black"
+</pre>
+adds a property color to car1, and assigns it a value of "black".
+However, this does not affect any other objects.
+To add the new property to all objects of the same type, you have to add the property to the
+definition of the <i>car</i> object type.
+
+<h3>Defining Methods</h3>
+<P>
+You can define methods for an object type by including a method defnition in the 
+object type definition.  For example, suppose you have a set of image GIF files,
+and you want to define a method that displays the information for the cars, along with the
+corresponding image.  You could define a function such as:
+<pre>
+function displayCar() {
+   var result = "A Beautiful " + this.year 
+                + " " + this.make + " " + this.model;
+   pretty_print(result)
+}
+</pre>
+where <i>pretty_print</i> is the previously defined function to display a string.
+Notice the use of <b>this</b> to refer to the object to which the method belongs.
+<P>
+You can make this function a method of <i>car</i> by adding the statement
+<pre>this.displayCar = displayCar;</pre> 
+to the object definition. So, the full definition of <i>car</i> would now 
+look like:
+
+<PRE>
+function car(make, model, year, owner) {
+   this.make = make; 
+   this.model = model;
+   this.year = year;
+   this.owner = owner;
+   this.displayCar = displayCar;
+}
+</PRE>
+<P>
+Then you can call this new method as follows:
+<pre>
+car1.displayCar()
+car2.displayCar()
+</pre>
+This will produce output like this:
+<P>
+<HR>
+A Beautiful 1993 Eagle Talon TSi
+<P>
+<HR>
+A Beautiful 1992 Nissan 300ZX 
+
+</body>
+</HTML>
+
+

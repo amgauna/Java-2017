@@ -1,0 +1,284 @@
+<HTML>
+<body>
+<h1>Using Built-in Objects and Functions</h1>
+<P>
+The JavaScript Language contains the following built-in objects and functions:
+<UL>
+<LI><a href="#string">String object</a>
+<LI><a href="#math">Math object</a>
+<LI><a href="#date">Date object</a>
+<LI><a href="#functs">Built-in functions</a>
+</UL>
+<P>
+These objects and their properties and methods are built into the language.
+You can use these objects in both client applications with Netscape Navigator 
+and server applications with LiveWire.
+
+<a name="string"> <h2>Using the String Object</h2></a>
+<P>
+Whenever you assign a string value to a variable or property, you create a string object.
+String literals are also string objects.  For example, the statement
+<pre>
+mystring = "Hello, World!"
+</pre>
+<P>
+creates a string object called mystring.  The literal "blah" is also a string object.
+
+<P>
+The string object has methods that return:
+<UL>
+<LI>a variation on the string itself, such as <i>substring</i> and <i>toUpperCase</i>.
+<LI>an HTML formatted version of the string, such as <i>bold</i> and <i>link</i>.
+</UL>
+<P>
+For example, given the above object, <code>mystring.toUpperCase()</code> returns "HELLO, WORLD!",
+and so does <code>"hello, world!".toUpperCase()</code>.
+
+
+<a name="math"><h2>Using the Math Object</h2></a>
+<P>
+The built-in Math object has properties and methods for mathematical constants and
+functions. For example, the Math object's PI property has the value of pi, which you
+would use in an application as
+<pre>
+Math.PI
+</pre>
+<P>
+Similarly, standard mathematical functions are methods of Math. 
+These include trigonometric, logarithmic, exponential, and other functions.
+For example, if you want to use the trigonometric function sine, you would write
+<pre>
+Math.sin(1.56)
+</pre>
+<P>
+Note that all trigonometric methods of math take arguments in radians. 
+<P>
+It is often convenient to use the with statement when a section of code uses several math
+constants and methods, so you don't have to type "Math" repeatedly. For example, 
+<pre>
+with (Math) {
+   a = PI * r*r;
+   y = r*sin(theta)
+   x = r*cos(theta)
+}
+</pre>
+
+<a name="date"><h2>Using the Date Object</h2></a>
+<P>
+JavaScript does not have a date data type.  However, the date object and its 
+methods enable you to work with dates and times in your applications.
+The date object has a large number of methods for setting, getting, 
+and manipulating dates.  It does not have any properties.
+<P>
+JavaScript handles dates very similarly to Java.
+The two languages have many of the same date methods, and both languages
+store dates as the number of milliseconds since January 1, 1970 00:00:00.
+<P>
+<b>NOTE:</b>
+You cannot currently work with dates prior to 1/1/70.
+
+<P>To create a date object:
+<PRE>
+<I>varName</I> = new Date(<I>parameters</I>)
+</PRE>
+where <I>varName</I> is a JavaScript variable name for the date object being created;
+it can be a new object or a property of an existing object.
+<P>
+The <I>parameters</I> for the Date constructor can be any of the following:
+<UL>
+<LI>Nothing: creates today's date and time.  For example,
+<code>today = new Date()</code>
+<LI>A string representing a date in the following form: 
+"Month day, year hours:minutes:seconds".  For example,
+<code>
+Xmas95= new Date("December 25, 1995 13:30:00")
+</code>
+If you omit hours, minutes, or seconds, the value will be set to zero.
+
+<LI>A set of integer values for year, month, and day.
+For example,
+<code>
+Xmas95 = new Date(95,11,25)
+</code>
+<LI>A set of values for year, month, day, hour, minute, and seconds
+For example,
+<code>
+Xmas95 = new Date(95,11,25,9,30,0)
+</code>
+</UL>
+<P>
+The Date object has a large number of methods for handling dates and times.
+The methods fall into these broad categories:
+<UL>
+<LI>"set" methods, for setting date and time values in date objects
+<LI>"get" methods, for getting date and time values from date objects
+<LI>"to" methods, for returning string values from date objects.
+<LI>parse and UTC methods, for parsing date strings.
+</UL>
+<P>
+The "get" and "set" methods enable you to get and set seconds, minutes, hours,
+day of the month, day of the week, months, and years separately.  
+There is a getDay method that returns the day of the week, but no
+corresponding setDay method, because the day of the week is set automatically.
+These methods use integers to represent these values as follows:
+<UL>
+<LI>seconds and minutes: 0 to 59
+<LI>hours: 0 to 23
+<LI>day: 0 to 6 (day of the week)
+<LI>date: 1 to 31 (day of the month)
+<LI>months: 0 (January) to 11 (December)
+<LI>year: years since 1900
+</UL>
+<P>
+For example, suppose you define the following date:
+<pre>
+Xmas95 = new Date("December 25, 1995")
+</pre>
+Then <code>Xmas95.getMonth()</code> returns 11, and <code>Xmas95.getYear()</code>
+returns 95.
+<P>
+The getTime and setTime methods are useful for comparing dates.
+The getTime method returns the number of milliseconds since the epoch for
+a date object.
+<P>
+For example, the following code displays the number of shopping days left until 
+Christmas:
+<PRE>
+today = new Date()
+nextXmas = new Date("December 25, 1990")
+nextXmas.setYear(today.getYear())
+msPerDay = 24 * 60 * 60 * 1000 ; // Number of milliseconds per day
+daysLeft = (nextXmas.getTime() - today.getTime()) / msPerDay;
+daysLeft = Math.round(daysLeft);
+document.write("Number of Shopping Days until Christmas: " + daysLeft);
+</PRE>
+<P>
+This example creates a date object named today that contains today's date.
+It then creates a date object named nextXmas, and sets the year to the 
+current year.  Then, using the number of milliseconds per day, it computes
+the number of days between today and nextXmas, using getTime, and rounding
+to a whole number of days.
+<P>
+The parse method is useful for assigning values from date strings to existing
+date objects.  For example, the following code uses parse and setTime to
+assign a date to the IPOdate object.
+<pre>
+IPOdate = new Date()
+IPOdate.setTime(Date.parse("Aug 9, 1995"))
+</pre>
+
+<!---
+In general, operating systems know what your current time zone is,
+but time is stored internally as Greenwich Mean Time, GMT (also known as
+Universal Coordinated Time or UTC).
+
+myvar = new Date(args)--you give local date/time args.
+getTime and setTime referenced to GMT.
+myvar = new Date(Date.UTC(args))--you give GMT arguments.
+--->
+
+<a name="functs"><h2>Using Built-in functions</h2></a>
+
+<P>
+JavaScript has several "top-level" functions built-in to the language.
+They are:
+<UL>
+<LI>eval
+<LI>parseInt
+<LI>parseFloat
+</UL>
+
+<A NAME="eval"><h3>The eval Function</h3></A>
+<P>
+The built-in function <i>eval</i> takes a string as its argument.
+The string can be is any string representing a JavaScript expression, statement, 
+or sequence of statements.
+The expression can include variables and properties of existing objects.
+<P>
+If the argument represents an expression, eval evaluates the expression.
+If the argument represents one or more JavaScript statements, eval performs the statements.
+
+<P>
+This function is useful for evaluating a string representing an arithmetic expression.
+For example, input from a form element is always a string, but you often want to convert
+it to a numerical value.
+<P>
+The following example takes input in a text field, applies the eval function and displays
+the result in another text field.
+If you type a numerical expression in the first field, and click on the button, the 
+expression will be evaluted.  For example, enter "(666 * 777) / 3", and click on the button
+to see the result.
+
+<xmp>
+<SCRIPT>
+function compute(obj) {
+   obj.result.value = eval(obj.expr.value)
+}
+</SCRIPT>
+<FORM NAME="evalform">
+Enter an expression: <INPUT TYPE=text NAME="expr" SIZE=20 >
+<BR>
+Result: <INPUT TYPE=text NAME="result" SIZE=20 >
+<BR> 
+<INPUT TYPE="button" VALUE="Click Me" onClick="compute(this.form)">
+</FORM>
+</XMP>
+<P>
+
+<SCRIPT>
+function compute(obj) {
+   obj.result.value = eval(obj.expr.value)
+}
+</SCRIPT>
+<FORM NAME="evalform">
+Enter an expression: <INPUT TYPE=text NAME="expr" SIZE=20 >
+<BR>
+Result: <INPUT TYPE=text NAME="result" SIZE=20 >
+<BR> 
+<INPUT TYPE="button" VALUE="Click Me" onClick="compute(this.form)">
+</FORM>
+
+<P>
+The eval function is not limited to evaluating numerical expressions, however.
+Its argument can include object references or even JavaScript statements.
+For example, you could define a function called setValue that would take two arguments:
+and object and a value, as follows:
+
+<PRE>
+ function setValue (myobj, myvalue) {
+   eval ("document.forms[0]." + myobj + ".value") = myvalue;
+ }
+</PRE>
+
+<P>
+Then, for example, you could call this function to set the value of a form element
+"text1" as follows:
+<PRE>
+setValue(text1, 42)
+</PRE>
+
+
+<A NAME="parseInt"><h3>The parseInt and parseFloat Functions</h3></A>
+
+<P>
+These two built-in functions return a numeric value when given a string as an argument.
+<P>
+ParseFloat parses its argument, a string, and attempts to return a floating point number. If it encounters
+a character other than a sign ( + or -), numeral (0-9), a decimal point, or an exponent, then it returns
+the value up to that point and ignores that character and all succeeding characters. If the first character
+cannot be converted to a number, it returns <i>NaN.</i>
+<P>
+The parseInt function parses its first argument, a string, and attempts to return an integer of the
+specified radix (base). For example, a radix of 10 indicates to convert to a decimal number, 8 octal,
+16 hexadecimal, and so on. For radixes above 10, the letters of the alphabet indicate numerals greater
+than 9. For example, for hexadecimal numbers (base 16), A through F are used. 
+<P>
+If parseInt encounters a character that is not a numeral in the specified radix, it ignores it and all
+succeeding characters and returns the integer value parsed up to that point. If the first character cannot
+be converted to a number in the specified radix, it returns <i>NaN.</i>  ParseInt truncates numbers to integer
+values. 
+
+</body>
+</HTML>
+
+

@@ -1,0 +1,2637 @@
+<HTML>
+<BODY>
+<P>
+<A NAME="objects"><H1>Objects</H1></A>
+
+<P>The following objects are available in JavaScript:
+<TABLE width=70%>
+<TR VALIGN=TOP>
+<TD>
+<LI><A HREF=#anchor_object>anchor&nbsp(<I>anchors</I>&nbsparray)</A>
+<LI><A HREF=#button_object>button</A>
+<LI><A HREF=#checkbox_object>checkbox</A>
+<LI><A HREF=#Date_object>Date</A>
+<LI><A HREF=#document_object>document</A>
+<LI><A HREF=#elements_object><I>elements</I>&nbsparray</A>
+<LI><A HREF=#form_object>form&nbsp(<I>forms</I>&nbsparray)</A>
+<LI><A HREF=#frame_object>frame&nbsp(<I>frames</I>&nbsparray)</A>
+<LI><A HREF=#hidden_object>hidden</A>
+<LI><A HREF=#history_object>history</A>
+<LI><A HREF=#link_object>link&nbsp(<I>links</I>&nbsparray)</A>
+<LI><A HREF=#location_object>location</A>
+</TD>
+<TD>
+<LI><A HREF=#Math_object>Math</A>
+<LI><A HREF=#navigator_object>navigator</A>
+<LI><A HREF=#password_object>password</A>
+<LI><A HREF=#radio_object>radio</A>
+<LI><A HREF=#reset_object>reset</A>
+<LI><A HREF=#select_object>select&nbsp(<I>options</I>&nbsparray)</A>
+<LI><A HREF=#string_object>string</A>
+<LI><A HREF=#submit_object>submit</A>
+<LI><A HREF=#text_object>text</A>
+<LI><A HREF=#textarea_object>textarea</A>
+<LI><A HREF=#window_object>window</A>
+</TD>
+</TR>
+</TABLE>
+
+<P>
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="anchor_object"><H2>anchor object (<I>anchors</I> array)</H2></A>
+<P>A piece of text that can be the target of a hypertext link.
+
+
+<H3>Syntax</H3>
+<P>To define an anchor, use standard HTML syntax:
+<PRE>
+&LTA [HREF=<I>locationOrURL</I>]
+   NAME="<I>anchorName</I>"
+   [TARGET="<I>windowName</I>"]&GT
+   <I>anchorText</I>
+&LT/A&GT
+</PRE>
+<I>HREF=locationOrURL</I> identifies a destination anchor or URL. If this attribute is present, the anchor object is also a link object. See <A HREF=#link_object>link</A> for details.
+<BR><I>NAME="anchorName"</I> specifies a tag that becomes an available hypertext target within the current document.
+<BR><I>TARGET="windowName"</I> specifies the window that the link is loaded into. This attribute is meaningful only if <I>HREF=locationOrURL</I> is present. See <A HREF=#link_object>link</A> for details.
+<BR><I>anchorText</I> specifies the text to display at the anchor.
+
+<P>You can also define an anchor using the <A HREF=methods.htm#anchor_method>anchor</A> method.
+
+
+<H3>Description</H3>
+<P>If an anchor object is also a link object, the object has entries in both the <I>anchors</I> and <I>links</I> arrays.
+
+
+<H4>The <I>anchors</I> array</H4>
+<P>You can reference the anchor objects in your code by using the <I>anchors</I> array. This array contains an entry for each &ltA&gt tag containing a NAME attribute in a document in source order. For example, if a document contains three named anchors, these anchors are reflected as <TT>document.anchors[0]</TT>, <TT>document.anchors[1]</TT>, and <TT>document.anchors[2]</TT>.
+
+<P>To use the <I>anchors</I> array:
+<PRE>
+1. document.anchors[<I>index</I>]
+2. document.anchors.length
+</PRE>
+<P><I>index</I> is an integer representing an anchor in a document.
+
+<P>To obtain the number of anchors in a document, use the length property: <TT>document.anchors.length</TT>.
+
+<P>Even though the <I>anchors</I> array represents named anchors, the value of anchors[<I>index</I>] is always null. But if a document names anchors in a systematic way using natural numbers, you can use the <I>anchors</I> array and its length property to validate an anchor name before using it in operations such as setting <TT>location.hash</TT>. See the example below.
+
+<P>Elements in the <I>anchors</I> array are read-only. For example, the statement <TT>document.anchors[0]="anchor1"</TT> has no effect.
+
+
+<H3>Properties</H3>
+<P>The anchors object has no properties. The <I>anchors</I> array has the following properties:
+<LI><A HREF=props.htm#length_property>length</A> reflects the number of named anchors in a document
+
+
+<H3>Methods</H3>
+<LI>None.
+
+
+<H3>Event handlers</H3>
+<LI>None.
+
+
+<H3>Property of</H3>
+<LI><A HREF=#document_object>document</A>
+
+
+<H3>Examples</H3>
+<P><B>Example 1: an anchor.</B> The following example defines an anchor for the text "Welcome to JavaScript".
+<XMP>
+<A NAME="javascript_intro"><H2>Welcome to JavaScript</H2></A>
+</XMP>
+<P>If the preceding anchor is in a file called intro.htm, a link in another file could define a jump to the anchor as follows:
+<XMP>
+<A HREF="intro.htm#javascript_intro">Introduction</A>
+</XMP>
+
+<P><B>Example 2: anchors array.</B> The following example opens two windows. The first window contains a series of buttons that set <TT>location.hash</TT> in the second window to a specific anchor. The second window defines four anchors named "0", "1", "2", and "3". (The anchor names in the document are therefore 0, 1, 2, ... (document.anchors.length-1)). When a button is pressed in the first window, the onClick event handler verifies that the anchor exists before setting <TT><I>window2</I>.location.hash</TT> to the specified anchor name.
+<P>LINK1.htm, which defines the first window and its buttons, contains the following code:
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Links and Anchors: Window 1</TITLE>
+</HEAD>
+<BODY>
+<SCRIPT>
+window2=open("link2.htm","secondLinkWindow","scrollbars=yes,width=250, height=400")
+
+function linkToWindow(num) {
+   if (window2.document.anchors.length > num)
+      window2.location.hash=num
+   else
+      alert("Anchor does not exist!")
+}
+
+</SCRIPT>
+<B>Links and Anchors</B>
+<FORM>
+<P>Click a button to display that anchor in window #2
+<P><INPUT TYPE="button" VALUE="0" NAME="link0_button"
+   onClick="linkToWindow(this.value)">
+<INPUT TYPE="button" VALUE="1" NAME="link0_button"
+   onClick="linkToWindow(this.value)">
+<INPUT TYPE="button" VALUE="2" NAME="link0_button"
+   onClick="linkToWindow(this.value)">
+<INPUT TYPE="button" VALUE="3" NAME="link0_button"
+   onClick="linkToWindow(this.value)">
+<INPUT TYPE="button" VALUE="4" NAME="link0_button"
+   onClick="linkToWindow(this.value)">
+</FORM>
+</BODY>
+</HTML>
+</XMP>
+
+<P>LINK2.htm, which contains the anchors, contains the following code:
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Links and Anchors: Window 2</TITLE>
+</HEAD>
+<BODY>
+<A NAME="0"><B>Some numbers</B> (Anchor 0)</A>
+<LI>one
+<LI>two
+<LI>three
+<LI>four
+<LI>five
+<LI>six
+<LI>seven
+<LI>eight
+<LI>nine
+<P><A NAME="1"><B>Some colors</B> (Anchor 1)</A>
+<LI>red
+<LI>orange
+<LI>yellow
+<LI>green
+<LI>blue
+<LI>purple
+<LI>brown
+<LI>black
+<P><A NAME="2"><B>Some music types</B> (Anchor 2)</A>
+<LI>R&B
+<LI>Jazz
+<LI>Soul
+<LI>Reggae
+<LI>Rock
+<LI>Country
+<LI>Classical
+<LI>Opera
+<P><A NAME="3"><B>Some countries</B> (Anchor 3)</A>
+<LI>Afghanistan
+<LI>Brazil
+<LI>Canada
+<LI>Finland
+<LI>India
+<LI>Italy
+<LI>Japan
+<LI>Kenya
+<LI>Mexico
+<LI>Nigeria
+</BODY>
+</HTML>
+</XMP>
+
+
+<H3>See also</H3>
+<LI><A HREF=#link_object>link</A> object
+<LI><A HREF=methods.htm#anchor_method>anchor</A> method
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="button_object"><H2>button object</H2></A>
+<P>A pushbutton on an HTML form.
+
+
+<H3>Syntax</H3>
+<P>To define a button:
+<PRE>
+&LTINPUT
+   TYPE="button"
+   NAME="<I>buttonName</I>"
+   VALUE="<I>buttonText</I>"
+   [onClick="<I>handlerText</I>"]&GT
+</PRE>
+<I>NAME="buttonName"</I> specifies the name of the button object. You can access this value using the name property.
+<BR><I>VALUE="buttonText"</I> specifies the label to display on the button face. You can access this value using the value property.
+
+<P>To use a button object's properties and methods:
+<PRE>
+1. <I>buttonName</I>.<I>propertyName</I>
+2. <I>buttonName</I>.<I>methodName</I>(<I>parameters</I>)
+3. <I>formName</I>.elements[<I>index</I>].<I>propertyName</I>
+4. <I>formName</I>.elements[<I>index</I>].<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>buttonName</I> is the value of the NAME attribute of a button object.
+<BR><I>formName</I> is either the value of the NAME attribute of a form object or an element in the <I>forms</I> array.
+<BR><I>index</I> is an integer representing a button object on a form.
+<BR><I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+
+<H3>Description</H3>
+<P>A button object on a form looks as follows:
+<FORM>
+<P><INPUT TYPE="button" VALUE="Click me">
+</FORM>
+<P>A button object is a form element and must be defined within a &LTFORM&GT tag.
+
+<P>The button object is a custom button that you can use to perform an action you define. The button executes the script specified by its onClick event handler.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#name_property>name</A> reflects the NAME attribute
+<LI><A HREF=props.htm#value_property>value</A> reflects the VALUE attribute
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#click_method>click</A>
+
+
+<H3>Event handlers</H3>
+<LI><A HREF=events.htm#onClick_event>onClick</A>
+
+
+<H3>Property of</H3>
+<LI><A HREF=#form_object>form</A>
+
+
+<H3>Examples</H3>
+<P>The following example creates a button named <I>calcButton</I>. The text "Calculate" is displayed on the face of the button. When the button is clicked, the function <I>calcFunction()</I> is called.
+<XMP>
+<INPUT TYPE="button" VALUE="Calculate" NAME="calcButton"
+   onClick="calcFunction(this.form)">
+</XMP>
+
+
+<H3>See also</H3>
+<LI><A HREF=#form_object>form</A>, <A HREF=#reset_object>reset</A>, and <A HREF=#submit_object>submit</A> objects
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="checkbox_object"> <H2>checkbox object</H2></A>
+<P>A checkbox on an HTML form. A checkbox is a toggle switch that lets the user set a value on or off.
+
+
+<H3>Syntax</H3>
+<P>To define a checkbox, use standard HTML syntax with the addition of the onClick event handler:
+<PRE>&LTINPUT
+   TYPE="checkbox"
+   NAME="<I>checkboxName</I>"
+   VALUE="<I>checkboxValue</I>"
+   [CHECKED]
+   [onClick="<I>handlerText</I>"]&GT
+   <I>textToDisplay</I>
+</PRE>
+<I>NAME="checkboxName"</I> specifies the name of the checkbox object. You can access this value using the name property.
+<BR><I>VALUE="checkboxValue"</I> specifies a value that is returned to the server when the checkbox  is selected and the form is submitted. This defaults to "on". You can access this value using the value property.
+<BR><I>CHECKED</I> specifies that the checkbox is displayed as checked. You can access this value using the defaultChecked property.
+<BR><I>textToDisplay</I> specifies the label to display beside the checkbox.
+
+<P>To use a checkbox object's properties and methods:
+<PRE>
+1. <I>checkboxName</I>.<I>propertyName</I>
+2. <I>checkboxName</I>.<I>methodName</I>(<I>parameters</I>)
+3. <I>formName</I>.elements[<I>index</I>].<I>propertyName</I>
+4. <I>formName</I>.elements[<I>index</I>].<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>checkboxName</I> is the value of the NAME attribute of a checkbox object.
+<BR><I>formName</I> is either the value of the NAME attribute of a form object or an element in the <I>forms</I> array.
+<BR><I>index</I> is an integer representing a checkbox object on a form.
+<BR><I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+
+<H3>Description</H3>
+<P>A checkbox object on a form looks as follows:
+<FORM>
+<P><INPUT TYPE="checkbox" CHECKED> Overnight delivery
+</FORM>
+<P>A checkbox object is a form element and must be defined within a &LTFORM&GT tag.
+
+<P>Use the checked property to specify whether the checkbox is currently checked. Use the defaultChecked property to specify whether the checkbox is checked when the form is loaded.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#checked_property>checked</A> lets you programatically check a checkbox
+<LI><A HREF=props.htm#defaultChecked_property>defaultChecked</A> reflects the CHECKED attribute
+<LI><A HREF=props.htm#name_property>name</A> reflects the NAME attribute
+<LI><A HREF=props.htm#value_property>value</A> reflects the VALUE attribute
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#click_method>click</A>
+
+
+<H3>Event handlers</H3>
+<LI><A HREF=events.htm#onClick_event>onClick</A>
+
+
+<H3>Property of</H3>
+<LI><A HREF=#form_object>form</A>
+
+
+<H3>Examples</H3>
+<P><B>Example 1.</B> The following example displays a group of four checkboxes that all appear checked by default.
+<XMP>
+<B>Specify your music preferences (check all that apply):</B>
+<BR><INPUT TYPE="checkbox" NAME="musicpref_rnb" CHECKED> R&B
+<BR><INPUT TYPE="checkbox" NAME="musicpref_jazz" CHECKED> Jazz
+<BR><INPUT TYPE="checkbox" NAME="musicpref_blues" CHECKED> Blues
+<BR><INPUT TYPE="checkbox" NAME="musicpref_newage" CHECKED> New Age
+</XMP>
+
+<P><B>Example 2.</B> The following example contains a form with three text boxes and one checkbox. The checkbox lets the user choose whether the text fields are converted to upper case. Each text field has an onChange event handler that converts the field value to upper case if the checkbox is checked. The checkbox has an onClick event handler that converts all fields to upper case when the user checks the checkbox.
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Checkbox object example</TITLE>
+</HEAD>
+<SCRIPT>
+function convertField(field) {
+   if (document.form1.convertUpper.checked) {
+      field.value = field.value.toUpperCase()}
+}
+function convertAllFields() {
+   document.form1.lastName.value = document.form1.lastName.value.toUpperCase()
+   document.form1.firstName.value = document.form1.firstName.value.toUpperCase()
+   document.form1.cityName.value = document.form1.cityName.value.toUpperCase()
+}
+</SCRIPT>
+<BODY>
+<FORM NAME="form1">
+<B>Last name:</B>
+<INPUT TYPE="text" NAME="lastName" SIZE=20 onChange="convertField(this)">
+<BR><B>First name:</B>
+<INPUT TYPE="text" NAME="firstName" SIZE=20 onChange="convertField(this)">
+<BR><B>City:</B>
+<INPUT TYPE="text" NAME="cityName" SIZE=20 onChange="convertField(this)">
+<P><INPUT TYPE="checkBox" NAME="convertUpper"
+   onClick="if (this.checked) {convertAllFields()}"
+   > Convert fields to upper case
+</FORM>
+</BODY>
+</HTML>
+</XMP>
+
+
+<H3>See also</H3>
+<LI><A HREF=#form_object>form</A> and <A HREF=#radio_object>radio</A> objects
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="Date_object"><H2>Date object</H2></A>
+<P>Lets you work with dates and times.
+
+<H3>Syntax</H3>
+<P>To create a Date object:
+<PRE>
+1. <I>dateObjectName</I> = new Date()
+2. <I>dateObjectName</I> = new Date("<I>month day</I>, <I>year hours</I>:<I>minutes</I>:<I>seconds</I>")
+3. <I>dateObjectName</I> = new Date(<I>year</I>, <I>month</I>, <I>day</I>)
+4. <I>dateObjectName</I> = new Date(<I>year</I>, <I>month</I>, <I>day</I>, <I>hours</I>, <I>minutes</I>, <I>seconds</I>)
+</PRE>
+<I>dateObjectName</I> is either the name of a new object or a property of an existing object.
+<BR><I>month, day, year, hours, minutes, and seconds</I> are string values for form 2 of the syntax. For forms 3 and 4, they are integer values.
+
+<P>To use Date methods:
+<PRE>
+<I>dateObjectName.methodName(parameters)</I>
+</PRE>
+<I>dateObjectName</I> is either the name of an existing Date object or a property of an existing object..
+<BR><I>methodName</I> is one of the methods listed below.
+
+<P>Exceptions: The Date object's parse and UTC methods are static methods that you use as follows:
+<PRE>
+Date.UTC(<I>parameters</I>)
+Date.parse(<I>parameters</I>)
+</PRE>
+
+
+<H3>Description</H3>
+<P>The Date object is a built-in JavaScript object.
+
+<P>Form 1 of the syntax creates today's date and time. If you omit hours, minutes, or seconds from form 2 or 4 of the syntax, the value will be set to zero.
+
+<P>The way JavaScript handles dates is very similar to the way Java handles dates: both languages have many of the same date methods, and both store dates internally as the number of milliseconds since January 1, 1970 00:00:00. Dates prior to 1970 are not allowed.
+
+
+<H3>Properties</H3>
+<LI>None.
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#getDate_method>getDate</A>
+<LI><A HREF=methods.htm#getDay_method>getDay</A>
+<LI><A HREF=methods.htm#getHours_method>getHours</A>
+<LI><A HREF=methods.htm#getMinutes_method>getMinutes</A>
+<LI><A HREF=methods.htm#getMonth_method>getMonth</A>
+<LI><A HREF=methods.htm#getSeconds_method>getSeconds</A>
+<LI><A HREF=methods.htm#getTime_method>getTime</A>
+<LI><A HREF=methods.htm#getTimeZoneOffset_method>getTimeZoneoffset</A>
+<LI><A HREF=methods.htm#getYear_method>getYear</A>
+<LI><A HREF=methods.htm#parse_method>parse</A>
+<LI><A HREF=methods.htm#setDate_method>setDate</A>
+<LI><A HREF=methods.htm#setHours_method>setHours</A>
+<LI><A HREF=methods.htm#setMinutes_method>setMinutes</A>
+<LI><A HREF=methods.htm#setMonth_method>setMonth</A>
+<LI><A HREF=methods.htm#setSeconds_method>setSeconds</A>
+<LI><A HREF=methods.htm#setTime_method>setTime</A>
+<LI><A HREF=methods.htm#setYear_method>setYear</A>
+<LI><A HREF=methods.htm#toGMTString_method>toGMTString</A>
+<LI><A HREF=methods.htm#toLocaleString_method>toLocaleString</A>
+<LI><A HREF=methods.htm#UTC_method>UTC</A>
+
+
+<H3>Event handlers</H3>
+<LI>None. Built-in objects do not have event handlers.
+
+
+<H3>Property of</H3>
+<LI>None.
+
+
+<H3>Examples</H3>
+<P>
+<XMP>today = new Date()
+birthday = new Date("December 17, 1995 03:24:00")
+birthday = new Date(95,12,17)
+birthday = new Date(95,12,17,3,24,0)
+</XMP>
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="document_object"><H2>document object</H2> </A>
+<P>Contains information on the current document, and provides methods for displaying HTML output to the user.
+
+
+<H3>Syntax</H3>
+<P>To define a document object, use standard HTML syntax:
+<PRE>
+&LTBODY
+   BACKGROUND="<I>backgroundImage</I>"
+   BGCOLOR="<I>backgroundColor</I>"
+   TEXT="<I>foregroundColor</I>"
+   LINK="<I>unfollowedLinkColor</I>"
+   ALINK="<I>activatedLinkColor</I>"
+   VLINK="<I>followedLinkColor</I>"
+   [onLoad="<I>handlerText</I>"]
+   [onUnload="<I>handlerText</I>"]&GT
+&LT/BODY&GT
+</PRE>
+<I>BACKGROUND</I> specifies an image that fills the background of the document.
+<BR><I>BGCOLOR</I>, <I>TEXT</I>, <I>LINK</I>, <I>ALINK</I>, and <I>VLINK</I> are color specifications expressed as a hexadecimal RGB triplet (in the format "rrggbb" or "#rrggbb") or as one of the string literals listed in <A HREF=colors.htm>Color Values</A>.
+
+<P>To use a document object's properties and methods:
+<PRE>
+1. document.<I>propertyName</I>
+2. document.<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+
+<H3>Description</H3>
+<P>An HTML document consists of a &LTHEAD&GT and &LTBODY&GT tag. The &LTHEAD&GT includes information on the document's title and base (the absolute URL base to be used for relative URL links in the document). The &LTBODY&GT tag encloses the body of a document, which is defined by the current URL. The entire body of the document (all other HTML elements for the document) goes within the &LTBODY&GT tag.
+
+<P>You can reference the anchors, forms, and links of a document by using the <I>anchors, forms,</I> and <I>links</I> arrays. These arrays contain an entry for each anchor, form, or link in a document.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#alinkColor_property>alinkColor</A> reflects the ALINK attribute
+<LI><A HREF=#anchor_object>anchors</A> is an array reflecting all the anchors in a document
+<LI><A HREF=props.htm#bgColor_property>bgColor</A> reflects the BGCOLOR attribute
+<LI><A HREF=props.htm#cookie_property>cookie</A> specifies a cookie
+<LI><A HREF=props.htm#fgColor_property>fgColor</A> reflects the TEXT attribute
+<LI><A HREF=#form_object>forms</A> is an array reflecting all the forms in a document
+<LI><A HREF=props.htm#lastModified_property>lastModified</A> reflects the date a document was last modified
+<LI><A HREF=props.htm#linkColor_property>linkColor</A> reflects the LINK attribute
+<LI><A HREF=#link_object>links</A> is an array reflecting all the links in a document
+<LI><A HREF=props.htm#location_property>location</A> reflects the complete URL of a document
+<LI><A HREF=props.htm#referrer_property>referrer</A> reflects the URL of the calling document
+<LI><A HREF=props.htm#title_property>title</A> reflects the contents of the &LTTITLE&GT tag
+<LI><A HREF=props.htm#vlinkColor_property>vlinkColor</A> reflects the VLINK attribute
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#clear_method>clear</A>
+<LI><A HREF=methods.htm#close_document_method>close</A>
+<LI><A HREF=methods.htm#open_document_method>open</A>
+<LI><A HREF=methods.htm#write_method>write</A>
+<LI><A HREF=methods.htm#writeln_method>writeln</A>
+
+
+<H3>Event handlers</H3>
+<LI>None. The onLoad and onUnload event handlers are specified in the &LTBODY&GT tag but are actually event handlers for the window object.
+
+
+<H3>Property of</H3>
+<LI><A HREF=#window_object>window</A>
+
+
+<H3>Examples</H3>
+<P>The following example creates two frames, each with one document. The document in the first frame contains links to anchors in the document of the second frame. Each document defines its colors.
+
+<P>DOC0.htm, which defines the frames, contains the following code:
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Document object example</TITLE>
+</HEAD>
+<FRAMESET COLS="30%,70%">
+<FRAME SRC="doc1.htm" NAME="frame1">
+<FRAME SRC="doc2.htm" NAME="frame2">
+</FRAMESET>
+</HTML>
+</XMP>
+
+<P>DOC1.htm, which defines the content for the first frame, contains the following code:
+<XMP>
+<HTML>
+<SCRIPT>
+</SCRIPT>
+<BODY
+   BGCOLOR="antiquewhite"
+   TEXT="darkviolet"
+   LINK="fuchsia"
+   ALINK="forestgreen"
+   VLINK="navy">
+<P><B>Some links</B>
+<LI><A HREF="doc2.htm#numbers" TARGET="frame2">Numbers</A>
+<LI><A HREF="doc2.htm#colors" TARGET="frame2">Colors</A>
+<LI><A HREF="doc2.htm#musicTypes" TARGET="frame2">Music types</A>
+<LI><A HREF="doc2.htm#countries" TARGET="frame2">Countries</A>
+</BODY>
+</HTML>
+</XMP>
+
+<P>DOC2.htm, which defines the content for the second frame, contains the following code:
+<XMP>
+<HTML>
+<SCRIPT>
+</SCRIPT>
+<BODY
+   BGCOLOR="oldlace" onLoad="alert('Hello, World.')"
+   TEXT="navy">
+<P><A NAME="numbers"><B>Some numbers</B></A>
+<LI>one
+<LI>two
+<LI>three
+<LI>four
+<LI>five
+<LI>six
+<LI>seven
+<LI>eight
+<LI>nine
+<P><A NAME="colors"><B>Some colors</B></A>
+<LI>red
+<LI>orange
+<LI>yellow
+<LI>green
+<LI>blue
+<LI>purple
+<LI>brown
+<LI>black
+<P><A NAME="musicTypes"><B>Some music types</B></A>
+<LI>R&B
+<LI>Jazz
+<LI>Soul
+<LI>Reggae
+<LI>Rock
+<LI>Country
+<LI>Classical
+<LI>Opera
+<P><A NAME="countries"><B>Some countries</B></A>
+<LI>Afghanistan
+<LI>Brazil
+<LI>Canada
+<LI>Finland
+<LI>India
+<LI>Italy
+<LI>Japan
+<LI>Kenya
+<LI>Mexico
+<LI>Nigeria
+</BODY>
+</HTML>
+</XMP>
+
+
+<H3>See also</H3>
+<LI><A HREF=#frame_object>frame</A> and <A HREF=#window_object>window</A> objects
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="elements_object"><H2><I>elements</I> array</H2> </A>
+<P>An array of objects corresponding to form elements (such as checkbox, radio, and text objects) in source order.
+
+<H3>Syntax</H3>
+<PRE>
+1. <I>formName</I>.elements[<I>index</I>]
+2. <I>formName</I>.elements.length
+</PRE>
+<P><I>formName</I> is either the name of a form or an element in the <I>forms</I> array.
+<BR><I>index</I> is an integer representing an object on a form.
+
+<H3>Description</H3>
+<P>You can reference a form's elements in your code by using the <I>elements</I> array. This array contains an entry for each object (button, checkbox, hidden, password, radio, reset, select, submit, text, or textarea object) in a form in source order. For example, if a form has a text field and two checkboxes, these elements are reflected as <TT><I>formName</I>.elements[0]</TT>, <TT><I>formName</I>.elements[1]</TT>, and <TT><I>formName</I>.elements[2]</TT>.
+
+<P>Although you can also reference a form's elements by using the element's name (from the NAME attribute), the elements array provides a way to reference form objects programatically without using their names. For example, if the first object on the <I>userInfo</I> form is the <I>userName</I> text object, you can evaluate it in either of the following ways:
+<PRE>
+userInfo.userName.value
+userInfo.elements[0].value
+</PRE>
+
+<P>To obtain the number of elements on a form, use the length property: <TT><I>formName</I>.elements.length</TT>. Each radio button in a radio object appears as a separate element in the <I>elements</I> array.
+
+<P>Elements in the <I>elements</I> array are read-only. For example, the statement <TT><I>formName</I>.elements[0]="music"</TT> has no effect.
+
+<P>The value of each element in the <I>elements</I> array is the full HTML statement for the object.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#length_property>length</A> reflects the number of elements on a form
+
+
+<H3>Property of</H3>
+<LI><A HREF=#form_object>form</A>
+
+
+<H3>Examples</H3>
+<P>See the examples for the <A HREF=props.htm#name_property>name</A> property.
+
+
+<H3>See also</H3>
+<LI><A HREF=#form_object>form</A> object
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="form_object"><H2>form object (<I>forms</I> array)</H2> </A>
+<P>Lets users input text and make choices from form objects such as checkboxes, radio buttons, and selection lists. You can also use a form to post data to a server.
+
+
+<H3>Syntax</H3>
+<P>To define a form, use standard HTML syntax with the addition of the onSubmit event handler:
+<PRE>
+&LTFORM
+   NAME="<I>formName</I>"
+   TARGET="<I>windowName</I>"
+   ACTION="<I>serverURL</I>"
+   METHOD=GET | POST
+   ENCTYPE="<I>encodingType</I>"
+   [onSubmit="<I>handlerText</I>"]&GT
+&LT/FORM&GT
+</PRE>
+
+<P><I>NAME="formName"</I> specifies the name of the form object.
+
+<P><I>TARGET="windowName"</I> specifies the window that form responses go to. When you submit a form with a TARGET attribute, server responses are displayed in the specified window instead of the window that contains the form. <I>windowName</I> can be an existing window; it can be a frame name specified in a &LTFRAMESET&GT tag; or it can be one of the literal frame names _top, _parent, _self, or _blank; it cannot be a JavaScript expression (for example, it cannot be parent<I>.frameName</I> or <I>windowName.frameName</I>). Some values for this attribute may require specific values for other attributes. See <A HREF="http://www.ics.uci.edu/pub/ietf/html/rfc1867.txt" TARGET="_top">RFC 1867</A> for details. You can access this value using the target property.
+
+<P><I>ACTION="serverURL"</I> specifies the URL of the server to which form field input information is sent. This attribute can specify a CGI or LiveWire application on the server; it can also be a mailto: URL if the form is to be mailed. See the <A HREF=#location_object>location</A> object for a description of the URL components. Some values for this attribute may require specific values for other attributes. See <A HREF="http://www.ics.uci.edu/pub/ietf/html/rfc1867.txt" TARGET="_top">RFC 1867</A> for details. You can access this value using the action property.
+
+<P><I>METHOD=GET | POST</I> specifies how information is sent to the server specified by <I>ACTION</I>. GET (the default) appends the input information to the URL which on most receiving systems becomes the value of the environment variable <I>QUERY_STRING</I>. POST sends the input information in a data body which is available on <I>stdin</I> with the data length set in the environment variable <I>CONTENT_LENGTH</I>. Some values for this attribute may require specific values for other attributes. See <A HREF="http://www.ics.uci.edu/pub/ietf/html/rfc1867.txt" TARGET="_top">RFC 1867</A> for details. You can access this value using the method property.
+
+<P><I>ENCTYPE="encodingType"</I> specifies the MIME encoding of the data sent: "application/x-www-form-urlencoded" (the default) or "multipart/form-data". Some values for this attribute may require specific values for other attributes. See <A HREF="http://www.ics.uci.edu/pub/ietf/html/rfc1867.txt" TARGET="_top">RFC 1867</A> for details. You can access this value using the encoding property.
+
+<P>To use a form object's properties and methods:
+<PRE>
+1. <I>formName</I>.<I>propertyName</I>
+2. <I>formName</I>.<I>methodName</I>(<I>parameters</I>)
+3. forms[<I>index</I>].<I>propertyName</I>
+4. forms[<I>index</I>].<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>formName</I> is the value of the NAME attribute of a form object.
+<BR><I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+<BR><I>index</I> is an integer representing a form object.
+
+
+<H3>Description</H3>
+<P>Each form in a document is a distinct object.
+
+<P>You can reference a form's elements in your code by using the element's name (from the NAME attribute) or the <A HREF=#elements_object><I>elements</I></A> array. The <I>elements</I> array contains an entry for each element (such as a checkbox, radio, or text object) in a form.
+
+
+<H4>The <I>forms</I> array</H4>
+<P>You can reference the forms in your code by using the <I>forms</I> array (you can also use the form name). This array contains an entry for each form object (&ltFORM&gt tag) in a document in source order. For example, if a document contains three forms, these forms are reflected as <TT>document.forms[0]</TT>, <TT>document.forms[1]</TT>, and <TT>document.forms[2]</TT>.
+
+<P>To use the <I>forms</I> array:
+<PRE>
+1. document.forms[<I>index</I>]
+2. document.forms.length
+</PRE>
+<P><I>index</I> is an integer representing a form in a document.
+
+<P>To obtain the number of forms in a document, use the length property: <TT>document.forms.length</TT>.
+
+<P>You can also refer to a form's elements by using the <I>forms</I> array. For example, you would refer to a text object named <I>quantity</I> in the second form as <TT>document.forms[1].quantity</TT>. You would refer to the value property of this text object as <TT>document.forms[1].quantity.value</TT>.
+
+<P>Elements in the <I>forms</I> array are read-only. For example, the statement <TT>document.forms[0]="music"</TT> has no effect.
+
+<P>The value of each element in the <I>forms</I> array is <TT>&ltobject <I>nameAttribute</I>&gt</TT>, where <I>nameAttribute</I> is the NAME attribute of the form.
+
+
+<H3>Properties</H3>
+<P>The form object has the following properties:
+<LI><A HREF=props.htm#action_property>action</A> reflects the ACTION attribute
+<LI><A HREF=#elements_object>elements</A> is an array reflecting all the elements in a form
+<LI><A HREF=props.htm#encoding_property>encoding</A> reflects the ENCTYPE attribute
+<LI><A HREF=props.htm#length_property>length</A> reflects the number of elements on a form
+<LI><A HREF=props.htm#method_property>method</A> reflects the METHOD attribute
+<LI><A HREF=props.htm#target_property>target</A> reflects the TARGET attribute
+
+<P>The <I>forms</I> array has the following properties:
+<LI><A HREF=props.htm#length_property>length</A> reflects the number of forms in a document
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#submit_method>submit</A>
+
+
+<H3>Event handlers</H3>
+<LI><A HREF=events.htm#onSubmit_event>onSubmit</A>
+
+
+<H3>Property of</H3>
+<LI><A HREF=#document_object>document</A>
+
+
+<H3>Examples</H3>
+<P><B>Example 1: named form.</B> The following example creates a form called <I>form1</I> that contains text fields for first name and last name. The form also contains two buttons that change the names to all upper case or all lower case. The function <I>setCase</I> shows how to refer to the form by its name.
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Form object example</TITLE>
+</HEAD>
+<SCRIPT>
+function setCase (caseSpec){
+if (caseSpec == "upper") {
+   document.form1.firstName.value=document.form1.firstName.value.toUpperCase()
+   document.form1.lastName.value=document.form1.lastName.value.toUpperCase()}
+   else {
+   document.form1.firstName.value=document.form1.firstName.value.toLowerCase()
+   document.form1.lastName.value=document.form1.lastName.value.toLowerCase()}
+}
+</SCRIPT>
+<BODY>
+<FORM NAME="form1">
+<B>First name:</B>
+<INPUT TYPE="text" NAME="firstName" SIZE=20>
+<BR><B>Last name:</B>
+<INPUT TYPE="text" NAME="lastName" SIZE=20>
+<P><INPUT TYPE="button" VALUE="Names to uppercase" NAME="upperButton"
+   onClick="setCase('upper')">
+<INPUT TYPE="button" VALUE="Names to lowercase" NAME="lowerButton"
+   onClick="setCase('lower')">
+</FORM>
+</BODY>
+</HTML>
+</XMP>
+
+<B>Example 2: <I>forms</I> array.</B> The onLoad event handler in the following example displays the name of the first form in an alert dialog box.
+<XMP>
+<BODY onLoad="alert('You are looking at the ' + document.forms[0] + ' form!')">
+</XMP>
+
+<P>If the form name is <I>musicType</I>, the alert displays the following message:
+<XMP>
+You are looking at the <object musicType> form!
+</XMP>
+
+<P><B>Example 3: onSubmit event handler.</B> The following example shows an onSubmit event handler that determines whether to submit a form. The form contains one text object where the user enters three characters. The onSubmit event handler calls a function, <I>checkData</I>, that returns true if the number of characters is three; otherwise, it returns false. Notice that the form's onSubmit event handler, not the submit button's onClick event handler, calls the <I>checkData</I> function. Also, the onSubmit event handler contains a <B>return</B> statement that returns the value obtained with the function call.
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Form object/onSubmit event handler example</TITLE>
+<TITLE>Form object example</TITLE>
+</HEAD>
+<SCRIPT>
+var dataOK=false
+function checkData (){
+if (document.form1.threeChar.value.length == 3) {
+   return true}
+   else {
+      alert("Enter exactly three characters. " + document.form1.threeChar.value + " is not valid.")
+      return false}
+}
+</SCRIPT>
+<BODY>
+<FORM NAME="form1" onSubmit="return checkData()">
+<B>Enter 3 characters:</B>
+<INPUT TYPE="text" NAME="threeChar" SIZE=3>
+<P><INPUT TYPE="submit" VALUE="Done" NAME="submit1"
+   onClick="document.form1.threeChar.value=document.form1.threeChar.value.toUpperCase()">
+</FORM>
+</BODY>
+</HTML>
+</XMP>
+
+<P><B>Example 4: submit method.</B> The following example is similar to the previous one, except it submits the form using the submit method instead of a submit object. The form's onSubmit event handler does not prevent the form from being submitted. The form uses a button's onClick event handler to call the <I>checkData</I> function. If the value is valid, the <I>checkData</I> function submits the form by calling the form's submit method.
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Form object/submit method example</TITLE>
+</HEAD>
+<SCRIPT>
+var dataOK=false
+function checkData (){
+if (document.form1.threeChar.value.length == 3) {
+   document.form1.submit()}
+   else {
+      alert("Enter exactly three characters. " + document.form1.threeChar.value + " is not valid.")
+      return false}
+}
+</SCRIPT>
+<BODY>
+<FORM NAME="form1" onSubmit="alert('Form is being submitted.')">
+<B>Enter 3 characters:</B>
+<INPUT TYPE="text" NAME="threeChar" SIZE=3>
+<P><INPUT TYPE="button" VALUE="Done" NAME="button1"
+   onClick="checkData()">
+</FORM>
+</BODY>
+</HTML>
+</XMP>
+
+
+<H3>See also</H3>
+<LI><A HREF=#button_object>button</A>, <A HREF=#checkbox_object>checkbox</A>, <A HREF=#hidden_object>hidden</A>, <A HREF=#password_object>password</A>, <A HREF=#radio_object>radio</A>, <A HREF=#reset_object>reset</A>, <A HREF=#select_object>select</A>, <A HREF=#submit_object>submit</A>, <A HREF=#text_object>text</A>, <A HREF=#textarea_object>textarea </A> objects
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="frame_object"><H2>frame object (<I>frames</I> array)</H2></A>
+<P>A window that can display multiple, independently scrollable frames on a single screen, each with its own distinct URL. Frames can point to different URLs and be targeted by other URLs, all within the same screen. A series of frames makes up a page.
+
+<H3>Syntax</H3>
+<P>To define a frame object, use standard HTML syntax. The onLoad and onUnload event handlers are specified in the &LTFRAMESET&GT tag but are actually event handlers for the window object:
+<PRE>
+&LTFRAMESET
+   ROWS="<I>rowHeightList</I>"
+   COLS="<I>columnWidthList</I>"
+   [onLoad="<I>handlerText</I>"]
+   [onUnload="<I>handlerText</I>"]&GT
+   [&LTFRAME SRC="<I>locationOrURL</I>" NAME="<I>frameName</I>"&GT]
+&LT/FRAMESET&GT
+</PRE>
+<I>ROWS="rowHeightList"</I> is a comma-separated list of values specifying the row-height of the frame. An optional suffix defines the units. Default units are pixels.
+<BR><I>COLS="columnWidthList"</I> is a comma-separated list of values specifying the column-width of the frame. An optional suffix defines the units. Default units are pixels.
+<BR><I>&LTFRAME&GT</I> defines a frame.
+<BR><I>SRC="locationOrURL"</I> specifies the URL of the document to be displayed in the frame. The URL cannot include an anchor name; for example <TT>&LTFRAME SRC="doc2.htm#colors" NAME="frame2"&GT</TT> is invalid. See the <A HREF=#location_object>location</A> object for a description of the URL components.
+<BR><I>NAME="frameName"</I> specifies a name to be used as a target of hyperlink jumps.
+
+<P>To use a frame object's properties:
+<PRE>
+1. [<I>windowReference</I>.]<I>frameName</I>.<I>propertyName</I>
+2. [<I>windowReference</I>.]frames[<I>index</I>].<I>propertyName</I>
+3. window.<I>propertyName</I>
+4. self.<I>propertyName</I>
+5. parent.<I>propertyName</I>
+</PRE>
+<I>windowReference</I> is a variable <I>windowVar</I> from a window definition (see <A HREF=#window_object>window</A> object), or one of the synonyms top or parent.
+<BR><I>frameName</I> is the value of the NAME attribute in the &LTFRAME&GT tag of a frame object.
+<BR><I>index</I> is an integer representing a frame object.
+<BR><I>propertyName</I> is one of the properties listed below.
+
+
+<H3>Description</H3>
+<P>The &LTFRAMESET&GT tag is used in an HTML document whose sole purpose is to define the layout of frames that make up a page. Each frame is a window object.
+
+<P>If a &LTFRAME&GT tag contains SRC and NAME attributes, you can refer to that frame from a sibling frame by using <TT>parent.<I>frameName</I></TT> or <TT>parent.frames[<I>index</I>]</TT>. For example, if the fourth frame in a set has NAME="homeFrame", sibling frames can refer to that frame using <TT>parent.homeFrame</TT> or <TT>parent.frames[3]</TT>.
+
+<P>The self and window properties are synonyms for the current frame, and you can optionally use them to refer to the current frame. You can use these properties to make your code more readable. See the properties listed below for examples.
+
+<P>The top and parent properties are also synonyms that can be used in place of the frame name. top refers to the top-most window that contains frames or nested framesets, and parent refers to the window containing the current frameset. See the <A HREF=props.htm#top_property>top</A> and <A HREF=props.htm#parent_property>parent</A> properties.
+
+<H4>The <I>frames</I> array</H4>
+<P>You can reference the frame objects in your code by using the <I>frames</I> array. This array contains an entry for each child frame (&ltFRAME&gt tag) in a window containing a &LTFRAMESET&GT tag in source order. For example, if a window contains three child frames, these frames are reflected as <TT>parent.frames[0]</TT>, <TT>parent.frames[1]</TT>, and <TT>parent.frames[2]</TT>.
+
+<P>To use the <I>frames</I> array:
+<PRE>
+1. [<I>frameReference</I>.]frames[<I>index</I>]
+2. [<I>frameReference</I>.]frames.length
+3. [<I>windowReference</I>.]frames[<I>index</I>]
+4. [<I>windowReference</I>.]frames.length
+</PRE>
+<P><I>frameReference</I> is a valid way of referring to a frame, as described in the <A HREF=objects.htm#frame_object>frame</A> object.
+<BR><I>windowReference</I> is a variable <I>windowVar</I> from a window definition (see <A HREF=#window_object>window</A> object), or one of the synonyms top or parent.
+<BR><I>index</I> is an integer representing a frame in a parent window.
+
+<P>To obtain the number of child frames in a window or frame, use the length property:
+<PRE>
+[<I>windowReference</I>.].frames.length
+[<I>frameReference</I>.].frames.length
+</PRE>
+
+<P>Elements in the <I>frames</I> array are read-only. For example, the statement <TT><I>windowReference</I>.frames[0]="frame1"</TT> has no effect.
+
+<P>The value of each element in the <I>frames</I> array is <TT>&ltobject <I>nameAttribute</I>&gt</TT>, where <I>nameAttribute</I> is the NAME attribute of the frame.
+
+
+<H3>Properties</H3>
+<P>The frame object has the following properties:
+<LI><A HREF=#frame_object>frames</A> is an array reflecting all the frames in a window
+<LI><A HREF=props.htm#name_property>name</A> reflects the NAME attribute of the &LTFRAME&GT tag
+<LI><A HREF=props.htm#length_property>length</A> reflects the number of child frames within a frame
+<LI><A HREF=props.htm#parent_property>parent</A> is a synonym for the window or frame containing the current frameset
+<LI><A HREF=props.htm#self_property>self</A> is a synonym for the current frame
+<LI><A HREF=props.htm#window_property>window</A> is a synonym for the current frame
+
+<P>The <I>frames</I> array has the following properties:
+<LI><A HREF=props.htm#length_property>length</A> reflects the number of child frames within a frame
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#clearTimeout_method>clearTimeout</A>
+<LI><A HREF=methods.htm#setTimeout_method>setTimeout</A>
+
+
+<H3>Event handlers</H3>
+<LI>None. The onLoad and onUnload event handlers are specified in the &LTFRAMESET&GT tag but are actually event handlers for the window object.
+
+
+<H3>Property of</H3>
+<LI>The frame object is a property of <A HREF=#window_object>window</A>
+<LI>The frames array is a property of both <A HREF=#frame_object>frame</A> and <A HREF=#window_object>window</A>
+
+
+<H3>Examples</H3>
+<P>The following example creates two windows, each with four frames. In the first window, the first frame contains pushbuttons that change the background colors of the frames in both windows.
+
+<P>FRAMSET1.htm, which defines the frames for the first window, contains the following code:
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Frames and Framesets: Window 1</TITLE>
+</HEAD>
+<FRAMESET ROWS="50%,50%" COLS="40%,60%" onLoad="alert('Hello, World.')">
+<FRAME SRC=framcon1.htm NAME="frame1">
+<FRAME SRC=framcon2.htm NAME="frame2">
+<FRAME SRC=framcon2.htm NAME="frame3">
+<FRAME SRC=framcon2.htm NAME="frame4">
+</FRAMESET>
+</HTML>
+</XMP>
+
+<P>FRAMSET2.htm, which defines the frames for the second window, contains the following code:
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Frames and Framesets: Window 2</TITLE>
+</HEAD>
+<FRAMESET ROWS="50%,50%" COLS="40%,60%">
+<FRAME SRC=framcon2.htm NAME="frame1">
+<FRAME SRC=framcon2.htm NAME="frame2">
+<FRAME SRC=framcon2.htm NAME="frame3">
+<FRAME SRC=framcon2.htm NAME="frame4">
+</FRAMESET>
+</HTML>
+</XMP>
+
+<P>FRAMCON1.htm, which defines the content for the first frame in the first window, contains the following code:
+<XMP>
+<HTML>
+<BODY>
+<A NAME="frame1"><H1>Frame1</H1></A>
+<P><A HREF="framcon3.htm" target=frame2>Click here</A> to load a different file into frame 2.
+<SCRIPT>
+window2=open("framset2.htm","secondFrameset")
+</SCRIPT>
+<FORM>
+<P><INPUT TYPE="button" VALUE="Change frame2 to teal"
+   onClick="parent.frame2.document.bgColor='teal'">
+<P><INPUT TYPE="button" VALUE="Change frame3 to slateblue"
+   onClick="parent.frames[2].document.bgColor='slateblue'">
+<P><INPUT TYPE="button" VALUE="Change frame4 to darkturquoise"
+   onClick="top.frames[3].document.bgColor='darkturquoise'">
+
+<P><INPUT TYPE="button" VALUE="window2.frame2 to violet"
+   onClick="window2.frame2.document.bgColor='violet'">
+<P><INPUT TYPE="button" VALUE="window2.frame3 to fuchsia"
+   onClick="window2.frames[2].document.bgColor='fuchsia'">
+<P><INPUT TYPE="button" VALUE="window2.frame4 to deeppink"
+   onClick="window2.frames[3].document.bgColor='deeppink'">
+</FORM>
+</BODY>
+</HTML>
+</XMP>
+
+<P>FRAMCON2.htm, which defines the content for the remaining frames, contains the following code:
+<XMP>
+<HTML>
+<BODY>
+<P>This is a frame.
+</BODY>
+</HTML>
+</XMP>
+
+<P>FRAMCON3.htm, which is referenced in a link object in FRAMCON1.htm, contains the following code:
+<XMP>
+<HTML>
+<BODY>
+<P>This is a frame. What do you think?
+</BODY>
+</HTML>
+</XMP>
+
+
+<H3>See also</H3>
+<LI><A HREF=#document_object>document</A> and <A HREF=#window_object>window</A> objects
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="hidden_object"><H2>hidden object</H2></A>
+<P>A text object that is suppressed from form display on an HTML form. A hidden object is used for passing name/value pairs when a form submits.
+
+
+<H3>Syntax</H3>
+<P>To define a hidden object:
+<PRE>
+&LTINPUT
+   TYPE="hidden"
+   NAME="<I>hiddenName</I>"
+   [VALUE="<I>textValue</I>"]&GT
+</PRE>
+<I>NAME="hiddenName"</I> specifies the name of the hidden object. You can access this value using the name property.
+<BR><I>VALUE="textValue"</I> specifies the initial value of the hidden object.
+
+<P>To use a hidden object's properties:
+<PRE>
+1. <I>hiddenName</I>.<I>propertyName</I>
+2. <I>formName</I>.elements[<I>index</I>].<I>propertyName</I>
+</PRE>
+<I>hiddenName</I> is the value of the NAME attribute of a hidden object.
+<BR><I>formName</I> is either the value of the NAME attribute of a form object or an element in the <I>forms</I> array.
+<BR><I>index</I> is an integer representing a hidden object on a form.
+<BR><I>propertyName</I> is one of the properties listed below.
+
+
+<H3>Description</H3>
+<P>A hidden object is a form element and must be defined within a &LTFORM&GT tag.
+
+<P>A hidden object cannot be seen or modified by a user, but you can programmatically change the value of the object by changing its value property. You can use hidden objects for client/server communication.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#name_property>name</A> reflects the NAME attribute
+<LI><A HREF=props.htm#value_property>value</A> reflects the current value of the hidden object
+
+
+<H3>Methods</H3>
+<LI>None.
+
+
+<H3>Event handlers</H3>
+<LI>None.
+
+
+<H3>Property of</H3>
+<LI><A HREF=#form_object>form</A>
+
+
+<H3>Examples</H3>
+The following example uses a hidden object to store the value of the last object the user clicked. The form contains a "Display hidden value" button that the user can click to display the value of the hidden object in an Alert dialog box.
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Hidden object example</TITLE>
+</HEAD>
+<BODY>
+<B>Click some of these objects, then click the "Display value" button
+<BR>to see the value of the last object clicked.</B>
+<FORM NAME="form1">
+<INPUT TYPE="hidden" NAME="hiddenObject" VALUE="None">
+<P>
+<INPUT TYPE="button" VALUE="Click me" NAME="button1" 
+   onclick="document.form1.hiddenObject.value=this.value">
+<P>
+<INPUT TYPE="radio" NAME="musicChoice" VALUE="soul-and-r&b"
+   onClick="document.form1.hiddenObject.value=this.value"> Soul and R&B
+<INPUT TYPE="radio" NAME="musicChoice" VALUE="jazz"
+   onClick="document.form1.hiddenObject.value=this.value"> Jazz
+<INPUT TYPE="radio" NAME="musicChoice" VALUE="classical"
+   onClick="document.form1.hiddenObject.value=this.value"> Classical
+<P>
+<SELECT NAME="music_type_single"
+   onFocus="document.form1.hiddenObject.value=this.options[this.selectedIndex].text">
+   <OPTION SELECTED> Red <OPTION> Orange <OPTION> Yellow
+</SELECT>
+<P><INPUT TYPE="button" VALUE="Display hidden value" NAME="button2"
+   onClick="alert('Last object clicked: ' + document.form1.hiddenObject.value)">
+</FORM>
+</BODY>
+</HTML>
+</XMP>
+
+
+<H3>See also</H3>
+<LI><A HREF=props.htm#cookie_property>cookie</A> property
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="history_object"><H2>history object</H2> </A>
+<P>Contains information on the URLs that the client has visited within a window. This information is stored in a history list, and is accessible through the Navigator's Go menu.
+
+<H3>Syntax</H3>
+<P>To use a history object:
+<PRE>
+1. history.<I>propertyName</I>
+2. history.<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+
+<H3>Description</H3>
+<P>The history object is a linked list of URLs the user has visited, as shown in the Navigator's Go menu.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#length_property>length</A> reflects the number of entries in the history object
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#back_method>back</A>
+<LI><A HREF=methods.htm#forward_method>forward</A>
+<LI><A HREF=methods.htm#go_method>go</A>
+
+
+<H3>Event handlers</H3>
+<LI>None.
+
+
+<H3>Property of</H3>
+<LI><A HREF=#document_object>document</A>
+
+
+<H3>Examples</H3>
+<P><B>Example 1.</B> The following example goes to the URL the user visited three clicks ago in the current window.
+<XMP>history.go(-3)</XMP>
+
+<P><B>Example 2.</B> You can use the history object with a specific window or frame. The following example causes <I>window2</I> to go back one item in its window (or session) history:
+<XMP>window2.history.back()</XMP>
+
+<P><B>Example 3.</B> The following example causes the second frame in a frameset to go back one item:
+<XMP>parent.frames[1].history.back()</XMP>
+
+<P><B>Example 4.</B> The following example causes the frame named <I>frame1</I> in a frameset to go back one item:
+<XMP>parent.frame1.history.back()</XMP>
+
+<P><B>Example 5.</B> The following example causes the frame named <I>frame2</I> in <I>window2</I> to go back one item:
+<XMP>window2.frame2.history.back()</XMP>
+
+<H3>See also</H3>
+<LI><A HREF=#location_object>location</A> object
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="link_object"><H2>link object (<I>links</I> array)</H2></A>
+<P>A piece of text or an image identified as a hypertext link. When the user clicks the link text, the link hypertext reference is loaded into its target window.
+
+
+<H3>Syntax</H3>
+<P>To define a link, use standard HTML syntax with the addition of the onClick and onMouseOver event handlers:
+<PRE>
+&LTA HREF=<I>locationOrURL</I>
+   [NAME="<I>anchorName</I>"]
+   [TARGET="<I>windowName</I>"]
+   [onClick="<I>handlerText</I>"]
+   [onMouseOver="<I>handlerText</I>"]&GT
+   <I>linkText</I>
+&LT/A&GT
+</PRE>
+<I>HREF=locationOrURL</I> identifies a destination anchor or URL. See the <A HREF=#location_object>location</A> object for a description of the URL components.
+<BR><I>NAME="anchorName"</I> specifies a tag that becomes an available hypertext target within the current document. If this attribute is present, the link object is also an anchor object. See <A HREF=#anchor_object>anchor</A> for details.
+<BR><I>TARGET="windowName"</I> specifies the window that the link is loaded into. <I>windowName</I> can be an existing window; it can be a frame name specified in a &LTFRAMESET&GT tag; or it can be one of the literal frame names _top, _parent, _self, or _blank; it cannot be a JavaScript expression (for example, it cannot be parent<I>.frameName</I> or <I>windowName.frameName</I>).
+<BR><I>linkText</I> is rendered as a hypertext link to the URL.
+
+<P>You can also define a link using the <A HREF=methods.htm#link_method>link</A> method.
+
+<P>To use a link object's properties:
+<PRE>
+document.links[<I>index</I>].<I>propertyName</I>
+</PRE>
+<I>index</I> is an integer representing a link object.
+<BR><I>propertyName</I> is one of the properties listed below.
+
+
+<H3>Description</H3>
+<P>Each link object is a location object and has the same properties as a location object.
+
+<P>If a link object is also an anchor object, the object has entries in both the <I>anchors</I> and <I>links</I> arrays.
+
+<P>When a user clicks a link object and navigates to the destination document (specified by <I>HREF=locationOrURL</I>), the destination document's referrer property contains the URL of the source document. Evaluate the referrer property from the destination document.
+
+
+<H4>The <I>links</I> array</H4>
+<P>You can reference the link objects in your code by using the <I>links</I> array. This array contains an entry for each link object (&LTA HREF=""&GT tag) in a document in source order. For example, if a document contains three link objects, these links are reflected as <TT>document.links[0]</TT>, <TT>document.links[1]</TT>, and <TT>document.links[2]</TT>.
+
+<P>To use the <I>links</I> array:
+<PRE>
+1. document.links[<I>index</I>]
+2. document.links.length
+</PRE>
+<P><I>index</I> is an integer representing a link in a document.
+
+<P>To obtain the number of links in a document, use the length property: <TT>document.links.length</TT>.
+
+<P>Elements in the <I>links</I> array are read-only. For example, the statement <TT>document.links[0]="link1"</TT> has no effect.
+
+
+<H3>Properties</H3>
+<P>The link object has the following properties:
+<LI><A HREF=props.htm#hash_property>hash</A> specifies an anchor name in the URL
+<LI><A HREF=props.htm#host_property>host</A> specifies the hostname:port portion of the URL
+<LI><A HREF=props.htm#hostname_property>hostname</A> specifies the host and domain name, or IP address, of a network host
+<LI><A HREF=props.htm#href_property>href</A> specifies the entire URL
+<LI><A HREF=props.htm#pathname_property>pathname</A> specifies the url-path portion of the URL
+<LI><A HREF=props.htm#port_property>port</A> specifies the communications port that the server uses for communications
+<LI><A HREF=props.htm#protocol_property>protocol</A> specifies the beginning of the URL, including the colon
+<LI><A HREF=props.htm#search_property>search</A> specifies a query
+<LI><A HREF=props.htm#target_property>target</A> reflects the TARGET attribute
+
+<P>The <I>links</I> array has the following properties:
+<LI><A HREF=props.htm#length_property>length</A> reflects the number of links in a document
+
+
+<H3>Methods</H3>
+<LI>None.
+
+
+<H3>Event handlers</H3>
+<LI><A HREF=events.htm#onClick_event>onClick</A>
+<LI><A HREF=events.htm#onMouseOver_event>onMouseOver</A>
+
+
+<H3>Property of</H3>
+<LI><A HREF=#document_object>document</A>
+
+
+<H3>Examples</H3>
+<P><B>Example 1.</B> The following example creates a hypertext link to an anchor named <I>javascript_intro</I>.
+<XMP>
+<A HREF="#javascript_intro">Introduction to JavaScript</A>
+</XMP>
+
+<P><B>Example 2.</B> The following example creates a hypertext link to an anchor named <I>numbers</I> in the file DOC3.htm in the window <I>window2</I>. If <I>window2</I> does not exist, it is created.
+<XMP>
+<LI><A HREF=doc3.htm#numbers TARGET="window2">Numbers</A>
+</XMP>
+
+<P><B>Example 3.</B> The following example takes the user back <I>x</I> entries in the history list:
+<XMP>
+<A HREF="javascript:history.go(-1 * x)">Click here</A>
+</XMP>
+
+<P><B>Example 4.</B> The following example creates a hypertext link to a URL. A set of radio buttons lets the user choose between three URLs. The link's onClick event handler sets the URL (the link's href property) based on the selected radio button. The link also has an onMouseOver event handler that changes the window's status property. As the example shows, you must return true to set the window.status property in the onMouseOver event handler.
+<XMP>
+<SCRIPT>
+var destHREF="'http://www.netscape.com/"
+</SCRIPT>
+<FORM NAME="form1">
+<B>Choose a destination from the following list, then click "Click me" below.</B>
+<BR><INPUT TYPE="radio" NAME="destination" VALUE="netscape"
+   onClick="destHREF='http://www.netscape.com/'"> Netscape home page
+<BR><INPUT TYPE="radio" NAME="destination" VALUE="sun"
+   onClick="destHREF='http://www.sun.com/'"> Sun home page
+<BR><INPUT TYPE="radio" NAME="destination" VALUE="rfc1867"
+   onClick="destHREF='http://www.ics.uci.edu/pub/ietf/html/rfc1867.txt'"> RFC 1867
+<P><A HREF=""
+   onMouseOver="window.status='Click this if you dare!'; return true"
+   onClick="this.href=destHREF">
+   <B>Click me</B></A>
+</FORM>
+</XMP>
+
+<P><B>Example 5: <I>links</I> array.</B> The following example opens the Netscape home page in the <I>newWindow</I> window. The <I>linkGetter()</I> function uses the links array to display the value of each of its links.
+<XMP>
+   newWindow=window.open("http://www.netscape.com")
+
+function linkGetter() {
+   msgWindow=window.open("")
+   for (var i = 0; i < newWindow.document.links.length; i++) {
+      msgWindow.document.write(newWindow.document.links[i] + "<BR>")
+   }
+}
+</XMP>
+
+
+<H3>See also</H3>
+<LI><A HREF=#anchor_object>anchor</A> object
+<LI><A HREF=methods.htm#link_method>link</A> method
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="location_object"><H2>location object</H2> </A>
+<P>Contains information on the current URL.
+
+
+<H3>Syntax</H3>
+<P>To use a location object:
+<PRE>
+[<I>windowReference</I>.]location.<I>propertyName</I>
+</PRE>
+<I>windowReference</I> is a variable <I>windowVar</I> from a window definition (see <A HREF=#window_object>window</A> object), or one of the synonyms top or parent.
+<BR><I>propertyName</I> is one of the properties listed below.
+
+
+<H3>Description</H3>
+<P>The location object represents a complete URL. Each property of the location object represents a different portion of the URL.
+
+<P>The following diagram of a URL shows the relationships between the location properties:
+
+<PRE><I>protocol</I>//<I>hostname</I>:<I>port</I> <I>pathname</I> <I>search</I> <I>hash</I></PRE>
+<P><I>protocol</I> represents the beginning of the URL, up to and including the first colon.
+<BR><I>hostname</I> represents the host and domain name, or IP address, of a network host.
+<BR><I>port</I> represents the communications port that the server uses for communications.
+<BR><I>pathname</I> represents the url-path portion of the URL.
+<BR><I>search</I> represents any query information in the URL, beginning with a question mark.
+<BR><I>hash</I> represents an anchor name fragment in the URL, beginning with a hash mark (#).
+
+<P>See the properties (listed below) for details about the different parts of the URL, or the <A HREF=props.htm#href_property>href</A> for examples.
+
+<P>The location object has two other properties not shown in the diagram above:
+<P><I>href</I> represents a complete URL.
+<BR><I>host</I> represents the concatenation <I>hostname</I>:<I>port</I>.
+
+<P>The location object is contained by the window object and is within its scope. If you reference a location object without specifying a window, the location object represents the current location. If you reference a location object and specify a window name, for example, <TT><I>windowReference</I>.location.<I>propertyName</I></TT>, the location object represents the location of the specified window.
+
+<P>Do not confuse the location object with the location property of the document object. You cannot change the value of the location property (<TT>document.location</TT>), but you can change the value of the location object's properties (<TT>window.location.<I>propertyName</I></TT>). <TT>document.location</TT> is a string-valued property that usually matches what <TT>window.location</TT> is set to when you load the document, but redirection may change it.
+
+<H3>Syntax for common URL types</H3>
+<P>When you specify a URL, you can use standard URL formats and JavaScript statements. The following list shows the syntax for specifying some of the most common types of URLs.
+<TABLE WIDTH=100% CELLSPACING=1>
+<TR ALIGN=LEFT VALIGN=TOP>
+<TH>URL&nbsptype</TH><TH>Protocol</TH><TH>Example</TH>
+</TR>
+<TR ALIGN=LEFT VALIGN=TOP>
+<TD>JavaScript&nbspcode</TD><TD>javascript:</TD><TD>javascript:history.go(-1)</TD>
+</TR>
+<TR ALIGN=LEFT VALIGN=TOP>
+<TD>Navigator&nbspinfo</TD><TD>about:</TD><TD>about:cache</TD>
+</TR>
+<TR ALIGN=LEFT VALIGN=TOP>
+<TD>World&nbspWide&nbspWeb</TD><TD>http:</TD><TD>http://www.netscape.com/</TD>
+</TR>
+<TR ALIGN=LEFT VALIGN=TOP>
+<TD>File</TD><TD>file:</TD><TD>file:///javascript/methods.htm</TD>
+</TR>
+<TR ALIGN=LEFT VALIGN=TOP>
+<TD>FTP</TD><TD>ftp:</TD><TD>ftp://ftp.mine.com/home/mine</TD>
+</TR>
+<TR ALIGN=LEFT VALIGN=TOP>
+<TD>MailTo</TD><TD>mailto:</TD><TD>mailto:info@netscape.com</TD>
+</TR>
+<TR ALIGN=LEFT VALIGN=TOP>
+<TD>Usenet</TD><TD>news:</TD><TD>news://news.scruznet.com/comp.lang.javascript</TD>
+</TR>
+<TR ALIGN=LEFT VALIGN=TOP>
+<TD>Gopher</TD><TD>gopher:</TD><TD>gopher.myhost.com</TD>
+</TR>
+</TABLE>
+
+<P>The javascript: protocol evaluates the expression after the colon (:), if there is one, and loads a page containing the string value of the expression, unless it is undefined. If the expression evaluates to undefined, no new page loads.
+
+<P>The about: protocol provides information on Navigator and has the following syntax:
+<PRE>
+about:[cache|plugins]
+</PRE>
+<I>about:</I> by itself is the same as choosing About Netscape from the Navigator's Help menu.
+<BR><I>about:cache</I> displays disk cache statistics.
+<BR><I>about:plug-ins</I> displays information about plug-ins you have configured. This is the same as choosing About Plug-ins from the Navigator's Help menu.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#hash_property>hash</A> specifies an anchor name in the URL
+<LI><A HREF=props.htm#host_property>host</A> specifies the hostname:port portion of the URL
+<LI><A HREF=props.htm#hostname_property>hostname</A> specifies the host and domain name, or IP address, of a network host
+<LI><A HREF=props.htm#href_property>href</A> specifies the entire URL
+<LI><A HREF=props.htm#pathname_property>pathname</A> specifies the url-path portion of the URL
+<LI><A HREF=props.htm#port_property>port</A> specifies the communications port that the server uses for communications
+<LI><A HREF=props.htm#protocol_property>protocol</A> specifies the beginning of the URL, including the colon
+<LI><A HREF=props.htm#search_property>search</A> specifies a query
+<LI><A HREF=props.htm#target_property>target</A> reflects the TARGET attribute of a link object
+
+
+<H3>Methods</H3>
+<LI>None.
+
+
+<H3>Event handlers</H3>
+<LI>None.
+
+
+<H3>Property of</H3>
+<LI><A HREF=#document_object>document</A>
+
+
+<H3>Examples</H3>
+<P><B>Example 1.</B> The following example sets the URL of the current window to the Netscape home page:
+<XMP>
+window.location.href="http://home.netscape.com/"
+</XMP>
+
+<P><B>Example 2.</B> The following example sets the URL of a frame named <I>frame2</I> to the Sun home page:
+<XMP>
+parent.frame2.location.href="http://www.sun.com/"
+</XMP>
+
+<P>See also the example for the <A HREF=#anchor_object>anchor</A> object.
+
+<H3>See also</H3>
+<LI><A HREF=#history_object>history</A> object
+<LI><A HREF=props.htm#location_property>location</A> property
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="Math_object"><H2>Math object</H2></A>
+<P>A built-in object that has properties and methods for mathematical constants and functions. For example, the Math object's PI property has the value of pi.
+
+
+<H3>Syntax</H3>
+<P>To use a Math object:
+<PRE>
+1. Math.<I>propertyName</I>
+2. Math.<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+
+<H3>Description</H3>
+<P>The Math object is a built-in JavaScript object.
+
+<P>You reference the constant PI as <TT>Math.PI</TT>. Constants are defined with the full precision of real numbers in JavaScript.
+<P>
+Similarly, you reference Math functions as methods. For example, the sine function is <TT>Math.sin(<I>argument</I>)</TT>, where <I>argument</I> is the argument.
+<P>
+It is often convenient to use the <B>with</B> statement when a section of code uses several Math constants and methods, so you don't have to type "Math" repeatedly. For example,
+<PRE>
+with (Math) {
+   a = PI * r*r
+   y = r*sin(theta)
+   x = r*cos(theta)
+}
+</PRE>
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#E_property>E</A>
+<LI><A HREF=props.htm#LN2_property>LN2</A>
+<LI><A HREF=props.htm#LN10_property>LN10</A>
+<LI><A HREF=props.htm#LOG2E_property>LOG2E</A>
+<LI><A HREF=props.htm#LOG10E_property>LOG10E</A>
+<LI><A HREF=props.htm#PI_property>PI</A>
+<LI><A HREF=props.htm#SQRT1_2_property>SQRT1_2</A>
+<LI><A HREF=props.htm#SQRT2_property>SQRT2</A>
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#abs_method>abs</A>
+<LI><A HREF=methods.htm#acos_method>acos</A>
+<LI><A HREF=methods.htm#asin_method>asin</A>
+<LI><A HREF=methods.htm#atan_method>atan</A>
+<LI><A HREF=methods.htm#ceil_method>ceil</A>
+<LI><A HREF=methods.htm#cos_method>cos</A>
+<LI><A HREF=methods.htm#exp_method>exp</A>
+<LI><A HREF=methods.htm#floor_method>floor</A>
+<LI><A HREF=methods.htm#log_method>log</A>
+<LI><A HREF=methods.htm#max_method>max</A>
+<LI><A HREF=methods.htm#min_method>min</A>
+<LI><A HREF=methods.htm#pow_method>pow</A>
+<LI><A HREF=methods.htm#random_method>random</A>
+<LI><A HREF=methods.htm#round_method>round</A>
+<LI><A HREF=methods.htm#sin_method>sin</A>
+<LI><A HREF=methods.htm#sqrt_method>sqrt</A>
+<LI><A HREF=methods.htm#tan_method>tan</A>
+
+
+<H3>Event handlers</H3>
+<LI>None. Built-in objects do not have event handlers.
+
+
+<H3>Property of</H3>
+<LI>None.
+
+
+<H3>Examples</H3>
+<P>See the examples for the individual properties and methods.
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="navigator_object"><H2>navigator object</H2></A>
+<P>Contains information about the version of Navigator in use.
+
+
+<H3>Syntax</H3>
+<P>To use a navigator object:
+<PRE>
+navigator.<I>propertyName</I>
+</PRE>
+<I>propertyName</I> is one of the properties listed below.
+
+
+<H3>Description</H3>
+<P>Use the navigator object to determine which version of the Navigator your users have.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#appCodeName_property>appCodeName</A> specifies the code name of the browser
+<LI><A HREF=props.htm#appName_property>appName</A> specifies the name of the browser
+<LI><A HREF=props.htm#appVersion_property>appVersion</A> specifies version information for the Navigator
+<LI><A HREF=props.htm#userAgent_property>userAgent</A> specifies the user-agent header
+
+
+<H3>Methods</H3>
+<LI>None.
+
+
+<H3>Event handlers</H3>
+<LI>None.
+
+
+<H3>Examples</H3>
+<P>See the examples for the individual properties.
+
+
+<H3>Property of</H3>
+<LI>None.
+
+
+<H3>See also</H3>
+<LI><A HREF=#link_object>link</A> object
+<LI><A HREF=#anchor_object>anchors</A> object
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="password_object"><H2>password object</H2></A>
+<P>A text field on an HTML form that conceals its value by displaying asterisks (*). When the user enters text into the field, asterisks (*) hide anything entered from view.
+
+
+<H3>Syntax</H3>
+<P>To define a password object, use standard HTML syntax:
+<PRE>
+&LTINPUT
+   TYPE="password"
+   NAME="<I>passwordName</I>"
+   [VALUE="<I>textValue</I>"]
+   SIZE=<I>integer</I>&GT
+</PRE>
+<I>NAME="passwordName"</I> specifies the name of the password object. You can access this value using the name property.
+<BR><I>VALUE="textValue"</I> specifies the initial value of the password object. You can access this value using the defaultValue property.
+<BR><I>SIZE=integer</I> specifies the number of characters the password object can accommodate without scrolling.
+
+<P>To use a password object's properties and methods:
+<PRE>
+1. <I>passwordName</I>.<I>propertyName</I>
+2. <I>passwordName</I>.<I>methodName</I>(<I>parameters</I>)
+3. <I>formName</I>.elements[<I>index</I>].<I>propertyName</I>
+4. <I>formName</I>.elements[<I>index</I>].<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>passwordName</I> is the value of the NAME attribute of a password object.
+<BR><I>formName</I> is either the value of the NAME attribute of a form object or an element in the <I>forms</I> array.
+<BR><I>index</I> is an integer representing a password object on a form.
+<BR><I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+
+<H3>Description</H3>
+<P>A password object on a form looks as follows:
+<FORM>
+<P><B>Enter your password:</B> <INPUT TYPE="password" VALUE="baylaurel" SIZE=25>
+</FORM>
+<P>A password object is a form element and must be defined within a &LTFORM&GT tag.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#defaultValue_property>defaultValue</A> reflects the VALUE attribute
+<LI><A HREF=props.htm#name_property>name</A> reflects the NAME attribute
+<LI><A HREF=props.htm#value_property>value</A> reflects the current value of the password object's field
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#focus_method>focus</A>
+<LI><A HREF=methods.htm#blur_method>blur</A>
+<LI><A HREF=methods.htm#select_method>select</A>
+
+
+<H3>Event handlers</H3>
+<LI>None.
+
+
+<H3>Property of</H3>
+<LI><A HREF=#form_object>form</A>
+
+
+<H3>Examples</H3>
+<P>
+<XMP>
+<B>Password:</B> <INPUT TYPE="password" NAME="password" VALUE="" SIZE=25>
+</XMP>
+
+
+<H3>See also</H3>
+<LI><A HREF=#form_object>form</A> and <A HREF=#text_object>text</A> objects
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="radio_object"><H2>radio object</H2></A>
+<P>A set of radio buttons on an HTML form. A set of radio buttons lets the user choose one item from a list.
+
+
+<H3>Syntax</H3>
+<P>To define a set of radio buttons, use standard HTML syntax with the addition of the onClick event handler:
+<PRE>
+&LTINPUT
+   TYPE="radio"
+   NAME="<I>radioName</I>"
+   VALUE="<I>buttonValue</I>"
+   [CHECKED]
+   [onClick="<I>handlerText</I>"]&GT
+   <I>textToDisplay</I>
+</PRE>
+<I>NAME="radioName"</I> specifies the name of the radio object. All radio buttons in a group have the same NAME attribute. You can access this value using the name property.
+<BR><I>VALUE="buttonValue"</I> specifies a value that is returned to the server when the radio button is selected and the form is submitted. This defaults to "on". You can access this value using the value property.
+<BR><I>CHECKED</I> specifies that the radio button is selected. You can access this value using the defaultChecked property.
+<BR><I>textToDisplay</I> specifies the label to display beside the radio button.
+
+<P>To use a radio button's properties and methods:
+<PRE>
+1. <I>radioName</I>[<I>index1</I>].<I>propertyName</I>
+2. <I>radioName</I>[<I>index1</I>].<I>methodName</I>(<I>parameters</I>)
+3. <I>formName</I>.elements[<I>index2</I>].<I>propertyName</I>
+4. <I>formName</I>.elements[<I>index2</I>].<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>radioName</I> is the value of the NAME attribute of a radio object.
+<BR><I>index1</I> is an integer representing a radio button in a radio object.
+<BR><I>formName</I> is either the value of the NAME attribute of a form object or an element in the <I>forms</I> array.
+<BR><I>index2</I> is an integer representing a radio button on a form. The <I>elements</I> array contains an entry for each radio button in a radio object.
+<BR><I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+
+<H3>Description</H3>
+<P>A radio object on a form looks as follows:
+<FORM>
+<P><INPUT TYPE="radio" NAME="musicChoice" CHECKED> R&B
+<BR><INPUT TYPE="radio" NAME="musicChoice"> Jazz
+<BR><INPUT TYPE="radio" NAME="musicChoice"> Soul
+</FORM>
+<P>A radio object is a form element and must be defined within a &LTFORM&GT tag.
+
+<P>All radio buttons in a radio button group use the same name property. To access the individual radio buttons in your code, follow the object name with an index starting from zero, one for each button the same way you would for an array such as <I>forms</I>: <TT>document.forms[0].<I>radioName</I>[0]</TT> is the first, <TT>document.forms[0].<I>radioName</I>[1]</TT> is the second, etc.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#checked_property>checked</A> lets you programatically select a radio button
+<LI><A HREF=props.htm#defaultChecked_property>defaultChecked</A> reflects the CHECKED attribute
+<LI><A HREF=props.htm#length_property>length</A> reflects the number of radio buttons in a radio object
+<LI><A HREF=props.htm#name_property>name</A> reflects the NAME attribute
+<LI><A HREF=props.htm#value_property>value</A> reflects the VALUE attribute
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#click_method>click</A>
+
+
+<H3>Event handlers</H3>
+<LI><A HREF=events.htm#onClick_event>onClick</A>
+
+
+<H3>Property of</H3>
+<LI><A HREF=#form_object>form</A>
+
+
+<H3>Examples</H3>
+<P><B>Example 1.</B> The following example defines a radio button group to choose among three music catalogs. Each radio button is given the same name, <I>NAME="musicChoice"</I>, forming a group of buttons for which only one choice can be selected. The example also defines a text field that defaults to what was chosen via the radio buttons but that allows the user to type a nonstandard catalog name as well. The onClick event handler sets the catalog name input field when the user clicks a radio button.
+<XMP>
+<INPUT TYPE="text" NAME="catalog" SIZE="20">
+<INPUT TYPE="radio" NAME="musicChoice" VALUE="soul-and-r&b"
+   onClick="musicForm.catalog.value = 'soul-and-r&b'"> Soul and R&B
+<INPUT TYPE="radio" NAME="musicChoice" VALUE="jazz"
+   onClick="musicForm.catalog.value = 'jazz'"> Jazz
+<INPUT TYPE="radio" NAME="musicChoice" VALUE="classical"
+   onClick="musicForm.catalog.value = 'classical'"> Classical
+</XMP>
+
+<P><B>Example 2.</B> The following example contains a form with three text boxes and three radio buttons. The radio buttons let the user choose whether the text fields are converted to upper case or lower case, or not converted at all. Each text field has an onChange event handler that converts the field value depending on which radio button is checked. The radio buttons for upper case and lower case have onClick event handlers that convert all fields when the user clicks the radio button.
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Radio object example</TITLE>
+</HEAD>
+<SCRIPT>
+function convertField(field) {
+   if (document.form1.conversion[0].checked) {
+      field.value = field.value.toUpperCase()}
+   else {
+   if (document.form1.conversion[1].checked) {
+      field.value = field.value.toLowerCase()}
+   }
+}
+function convertAllFields(caseChange) {
+   if (caseChange=="upper") {
+   document.form1.lastName.value = document.form1.lastName.value.toUpperCase()
+   document.form1.firstName.value = document.form1.firstName.value.toUpperCase()
+   document.form1.cityName.value = document.form1.cityName.value.toUpperCase()}
+   else {
+   document.form1.lastName.value = document.form1.lastName.value.toLowerCase()
+   document.form1.firstName.value = document.form1.firstName.value.toLowerCase()
+   document.form1.cityName.value = document.form1.cityName.value.toLowerCase()
+   }
+}
+</SCRIPT>
+<BODY>
+<FORM NAME="form1">
+<B>Last name:</B>
+<INPUT TYPE="text" NAME="lastName" SIZE=20 onChange="convertField(this)">
+<BR><B>First name:</B>
+<INPUT TYPE="text" NAME="firstName" SIZE=20 onChange="convertField(this)">
+<BR><B>City:</B>
+<INPUT TYPE="text" NAME="cityName" SIZE=20 onChange="convertField(this)">
+<P><B>Convert values to:</B>
+<BR><INPUT TYPE="radio" NAME="conversion" VALUE="upper"
+   onClick="if (this.checked) {convertAllFields('upper')}"> Upper case
+<BR><INPUT TYPE="radio" NAME="conversion" VALUE="lower"
+   onClick="if (this.checked) {convertAllFields('lower')}"> Lower case
+<BR><INPUT TYPE="radio" NAME="conversion" VALUE="noChange"> No conversion
+</FORM>
+</BODY>
+</HTML>
+</XMP>
+
+<P>See also the example for the <A HREF=#link_object>link</A> object.
+
+
+<H3>See also</H3>
+<LI><A HREF=#checkbox_object>checkbox</A>, <A HREF=#form_object>form</A>, and <A HREF=#select_object>select</A> objects
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="reset_object"><H2>reset object</H2></A>
+<P>A reset button on an HTML form. A reset button resets all elements in a form to their defaults.
+
+
+<H3>Syntax</H3>
+<P>To define a reset button, use standard HTML syntax with the addition of the onClick event handler:
+<PRE>
+&LTINPUT
+   TYPE="reset"
+   NAME="<I>resetName</I>"
+   VALUE="<I>buttonText</I>"
+   [onClick="<I>handlerText</I>"]&GT
+</PRE>
+<I>NAME="resetName"</I> specifies the name of the reset object. You can access this value using the name property.
+<BR><I>VALUE="buttonText"</I> specifies the text to display on the button face. You can access this value using the value property.
+
+<P>To use a reset object's properties and methods:
+<PRE>
+1. <I>resetName</I>.<I>propertyName</I>
+2. <I>resetName</I>.<I>methodName</I>(<I>parameters</I>)
+3. <I>formName</I>.elements[<I>index</I>].<I>propertyName</I>
+4. <I>formName</I>.elements[<I>index</I>].<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>resetName</I> is the value of the NAME attribute of a reset object.
+<BR><I>formName</I> is either the value of the NAME attribute of a form object or an element in the <I>forms</I> array.
+<BR><I>index</I> is an integer representing a reset object on a form.
+<BR><I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+
+<H3>Description</H3>
+<P>A reset object on a form looks as follows:
+<FORM>
+<P><INPUT TYPE="reset" VALUE="Defaults">
+</FORM>
+<P>A reset object is a form element and must be defined within a &LTFORM&GT tag.
+
+<P>The reset button's onClick event handler cannot prevent a form from being reset; once the button is clicked, the reset cannot be canceled.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#name_property>name</A> reflects the NAME attribute
+<LI><A HREF=props.htm#value_property>value</A> reflects the VALUE attribute
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#click_method>click</A>
+
+
+<H3>Event handlers</H3>
+<LI><A HREF=events.htm#onClick_event>onClick</A>
+
+
+<H3>Property of</H3>
+<LI><A HREF=#form_object>form</A>
+
+
+<H3>Examples</H3>
+<P><B>Example 1.</B> The following example displays a text object with the default value "CA" and a reset button with the text "Clear Form" displayed on its face. If the user types a state abbreviation in the text object and then clicks the Clear Form button, the original value of "CA" is restored.
+<XMP>
+<B>State: </B><INPUT TYPE="text" NAME="state" VALUE="CA" SIZE="2">
+<P><INPUT TYPE="reset" VALUE="Clear Form">
+</XMP>
+
+<P><B>Example 2.</B> The following example displays two text objects, a select object, and three radio buttons; all of these objects have default values. The form also has a reset button with the text "Defaults" on its face. If the user changes the value of any of the objects and then clicks the Defaults button, the original values are restored.
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Reset object example</TITLE>
+</HEAD>
+<BODY>
+<FORM NAME="form1">
+<BR><B>City: </B><INPUT TYPE="text" NAME="city" VALUE="Santa Cruz" SIZE="20">
+<B>State: </B><INPUT TYPE="text" NAME="state" VALUE="CA" SIZE="2">
+<P><SELECT NAME="colorChoice">
+   <OPTION SELECTED> Blue
+   <OPTION> Yellow
+   <OPTION> Green
+   <OPTION> Red
+</SELECT>
+<P><INPUT TYPE="radio" NAME="musicChoice" VALUE="soul-and-r&b"
+   CHECKED> Soul and R&B
+<BR><INPUT TYPE="radio" NAME="musicChoice" VALUE="jazz">
+   Jazz
+<BR><INPUT TYPE="radio" NAME="musicChoice" VALUE="classical">
+   Classical
+<P><INPUT TYPE="reset" VALUE="Defaults" NAME="reset1">
+</FORM>
+</BODY>
+</HTML>
+</XMP>
+
+
+<H3>See also</H3>
+<LI><A HREF=#button_object>button</A>, <A HREF=#form_object>form</A>, and <A HREF=#submit_object>submit</A> objects
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="select_object"><H2>select object (<I>options</I> array)</H2></A>
+<P>A selection list or scrolling list on an HTML form. A selection list lets the user choose one item from a list. A scrolling list lets the user choose one or more items from a list.
+
+
+<H3>Syntax</H3>
+<P>To define a select object, use standard HTML syntax with the addition of the onBlur, onChange, and onFocus event handlers:
+<PRE>
+&LTSELECT
+   NAME="<I>selectName</I>"
+   [SIZE="<I>integer</I>"]
+   [MULTIPLE]
+   [onBlur="<I>handlerText</I>"]
+   [onChange="<I>handlerText</I>"]
+   [onFocus="<I>handlerText</I>"]&GT
+   &LTOPTION VALUE="<I>optionValue</I>" [SELECTED]&GT <I>textToDisplay</I> [ ... &LTOPTION&GT <I>textToDisplay</I>]
+&LT/SELECT&GT
+</PRE>
+<I>NAME="selectName"</I> specifies the name of the select object. You can access this value using the name property.
+<BR><I>SIZE="integer"</I> specifies the number of options visible when the form is displayed.
+<BR><I>MULTIPLE</I> specifies that the select object is a scrolling list (not a selection list).
+<BR><I>OPTION</I> specifies a selection element in the list. You can access the options using the options array.
+<BR><I>VALUE="optionValue"</I> specifies a value that is returned to the server when the option is selected and the form is submitted. You can access this value using the value property.
+<BR><I>SELECTED</I> specifies that the option is selected by default. You can access this value using the defaultSelected property.
+<BR><I>textToDisplay</I> specifies the text to display in the list. You can access this value using the text property.
+
+<P>To use a select object's properties and methods:
+<PRE>
+1. <I>selectName</I>.<I>propertyName</I>
+2. <I>selectName</I>.<I>methodName</I>(<I>parameters</I>)
+3. <I>formName</I>.elements[<I>index</I>].<I>propertyName</I>
+4. <I>formName</I>.elements[<I>index</I>].<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>selectName</I> is the value of the NAME attribute of a select object.
+<BR><I>formName</I> is either the value of the NAME attribute of a form object or an element in the <I>forms</I> array.
+<BR><I>index</I> is an integer representing a select object on a form.
+<BR><I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+<P>To use an option's properties:
+<PRE>
+1. <I>selectName</I>.options[<I>index1</I>].<I>propertyName</I>
+2. <I>formName</I>.elements[<I>index2</I>].options[<I>index1</I>].<I>propertyName</I>
+</PRE>
+<I>selectName</I> is the value of the NAME attribute of a select object.
+<BR><I>index1</I> is an integer representing an option in a select object.
+<BR><I>formName</I> is either the value of the NAME attribute of a form object or an element in the <I>forms</I> array.
+<BR><I>index2</I> is an integer representing a select object on a form.
+<BR><I>propertyName</I> is one of the properties listed below.
+
+
+<H3>Description</H3>
+<P>A select object on a form looks as follows. The object on the left is a selection list that lets the user choose one item; the object on the right is a scrolling list that lets the user choose one or more items:
+<FORM>
+<SELECT NAME="music_type_single">
+   <OPTION SELECTED> R&B
+   <OPTION> Jazz
+   <OPTION> Blues
+   <OPTION> New Age
+</SELECT>
+<SELECT NAME="music_type_multi" MULTIPLE>
+   <OPTION SELECTED> R&B
+   <OPTION> Jazz
+   <OPTION> Blues
+   <OPTION> New Age
+</SELECT>
+</FORM>
+<P>A select object is a form element and must be defined within a &LTFORM&GT tag.
+
+
+<H4>The <I>options</I> array</H4>
+<P>You can reference the options of a select object in your code by using the <I>options</I> array. This array contains an entry for each option in a select object (&LTOPTION&GT tag) in source order. For example, if a select object named <I>musicStyle</I> contains three options, these options are reflected as <TT>musicStyle.options[0]</TT>, <TT>musicStyle.options[1]</TT>, and <TT>musicStyle.options[2]</TT>.
+
+<P>To use the <I>options</I> array:
+<PRE>
+1. <I>selectName</I>.options
+2. <I>selectName</I>.options[<I>index</I>]
+3. <I>selectName</I>.options.length
+</PRE>
+<P><I>selectName</I> is either the value of the NAME attribute of a select object or an element in the <I>elements</I> array.
+<BR><I>index</I> is an integer representing an option in a select object.
+
+<P>To obtain the number of options in a select object, use the length property of either the options array or the select object:
+<PRE>
+1. <I>selectName</I>.length
+2. <I>selectName</I>.options.length
+</PRE>
+
+<P>The select object has properties that you can access only through the options array. These properties are listed below.
+
+<P>Even though each element in the <I>options</I> array represents a select option, the value of options[<I>index</I>] is always null. The value returned by <I>selectName</I>.options represents the full HTML statement for the <I>selectName</I> object.
+
+<P>Elements in the <I>options</I> array are read-only. For example, the statement <TT><I>selectName</I>.options[0]="guitar"</TT> has no effect.
+
+
+<H3>Properties</H3>
+<P>The select object has the following properties:
+<LI><A HREF=props.htm#length_property>length</A> reflects the number of options in a select object
+<LI><A HREF=props.htm#name_property>name</A> reflects the NAME attribute
+<LI><A HREF=#select_object>options</A> reflects the &LTOPTION&GT tags
+<LI><A HREF=props.htm#selectedIndex_property>selectedIndex</A> reflects the index of the selected option (or the first selected option, if multiple options are selected)
+
+<P>The <I>options</I> array has the following properties:
+<LI><A HREF=props.htm#defaultSelected_property>defaultSelected</A> reflects the SELECTED attribute
+<LI><A HREF=props.htm#index_property>index</A> reflects the index of an option
+<LI><A HREF=props.htm#length_property>length</A> reflects the number of options in a select object
+<LI><A HREF=props.htm#name_property>name</A> reflects the NAME attribute
+<LI><A HREF=props.htm#selected_property>selected</A> lets you programatically select an option
+<LI><A HREF=props.htm#selectedIndex_property>selectedIndex</A> reflects the index of the selected option
+<LI><A HREF=props.htm#text_property>text</A> reflects the <I>textToDisplay</I> that follows an &LTOPTION&GT tag
+<LI><A HREF=props.htm#value_property>value</A> reflects the VALUE attribute
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#blur_method>blur</A>
+<LI><A HREF=methods.htm#focus_method>focus</A>
+
+
+<H3>Event handlers</H3>
+<LI><A HREF=events.htm#onBlur_event>onBlur</A>
+<LI><A HREF=events.htm#onChange_event>onChange</A>
+<LI><A HREF=events.htm#onFocus_event>onFocus</A>
+
+
+<H3>Property of</H3>
+<LI>The select object is a property of <A HREF=#form_object>form</A>
+<LI>The options array is a property of <A HREF=#select_object>select</A>
+
+
+<H3>Examples</H3>
+<P><B>Example 1.</B> The following example displays a selection list and a scrolling list.
+<XMP>
+Choose the music type for your free CD:
+<SELECT NAME="music_type_single">
+   <OPTION SELECTED> R&B
+   <OPTION> Jazz
+   <OPTION> Blues
+   <OPTION> New Age
+</SELECT>
+<P>Choose the music types for your free CDs:
+<BR><SELECT NAME="music_type_multi" MULTIPLE>
+   <OPTION SELECTED> R&B
+   <OPTION> Jazz
+   <OPTION> Blues
+   <OPTION> New Age
+</SELECT>
+</XMP>
+
+<P><B>Example 2.</B> The following example displays two selection lists that let the user choose a month and day. These selection lists are initialized to the current date. The user can change the month and day by using the selection lists or by choosing preset dates from radio buttons. Text fields on the form display the values of the select object's properties and indicate the date chosen and whether it is Cinco de Mayo.
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Select object example</TITLE>
+</HEAD>
+<BODY>
+<SCRIPT>
+var today = new Date()
+//---------------
+function updatePropertyDisplay(monthObj,dayObj) {
+   // Get date strings
+   var monthInteger, dayInteger, monthString, dayString
+   monthInteger=monthObj.selectedIndex
+   dayInteger=dayObj.selectedIndex
+   monthString=monthObj.options[monthInteger].text
+   dayString=dayObj.options[dayInteger].text
+   // Display property values
+   document.selectForm.textFullDate.value=monthString + " " + dayString
+   document.selectForm.textMonthLength.value=monthObj.length
+   document.selectForm.textDayLength.value=dayObj.length
+   document.selectForm.textMonthName.value=monthObj.name
+   document.selectForm.textDayName.value=dayObj.name
+   document.selectForm.textMonthIndex.value=monthObj.selectedIndex
+   document.selectForm.textDayIndex.value=dayObj.selectedIndex
+   // Is it Cinco de Mayo?
+   if (monthObj.options[4].selected && dayObj.options[4].selected)
+      document.selectForm.textCinco.value="Yes!"
+   else
+      document.selectForm.textCinco.value="No"
+}
+</SCRIPT>
+<!--------------->
+<FORM NAME="selectForm">
+<P><B>Choose a month and day:</B> 
+Month: <SELECT NAME="monthSelection"
+   onChange="updatePropertyDisplay(this,document.selectForm.daySelection)">
+   <OPTION> January <OPTION> February <OPTION> March
+   <OPTION> April <OPTION> May <OPTION> June
+   <OPTION> July <OPTION> August <OPTION> September
+   <OPTION> October <OPTION> November <OPTION> December
+</SELECT>
+Day: <SELECT NAME="daySelection"
+   onChange="updatePropertyDisplay(document.selectForm.monthSelection,this)">
+   <OPTION> 1 <OPTION> 2 <OPTION> 3 <OPTION> 4 <OPTION> 5
+   <OPTION> 6 <OPTION> 7 <OPTION> 8 <OPTION> 9 <OPTION> 10
+   <OPTION> 11 <OPTION> 12 <OPTION> 13 <OPTION> 14 <OPTION> 15
+   <OPTION> 16 <OPTION> 17 <OPTION> 18 <OPTION> 19 <OPTION> 20
+   <OPTION> 21 <OPTION> 22 <OPTION> 23 <OPTION> 24 <OPTION> 25
+   <OPTION> 26 <OPTION> 27 <OPTION> 28 <OPTION> 29 <OPTION> 30
+   <OPTION> 31
+</SELECT>
+<P><B>Set the date to: </B>
+<INPUT TYPE="radio" NAME="dateChoice"
+   onClick="
+      monthSelection.selectedIndex=0;
+      daySelection.selectedIndex=0;
+      updatePropertyDisplay(document.selectForm.monthSelection,document.selectForm.daySelection)">
+   New Year's Day
+<INPUT TYPE="radio" NAME="dateChoice"
+   onClick="
+      monthSelection.selectedIndex=4;
+      daySelection.selectedIndex=4;
+      updatePropertyDisplay(document.selectForm.monthSelection,document.selectForm.daySelection)">
+   Cinco de Mayo
+<INPUT TYPE="radio" NAME="dateChoice"
+   onClick="
+      monthSelection.selectedIndex=5;
+      daySelection.selectedIndex=20;
+      updatePropertyDisplay(document.selectForm.monthSelection,document.selectForm.daySelection)">
+   Summer Solstice
+<P><B>Property values:</B>
+<BR>Date chosen: <INPUT TYPE="text" NAME="textFullDate" VALUE="" SIZE=20">
+<BR>monthSelection.length<INPUT TYPE="text" NAME="textMonthLength" VALUE="" SIZE=20">
+<BR>daySelection.length<INPUT TYPE="text" NAME="textDayLength" VALUE="" SIZE=20">
+<BR>monthSelection.name<INPUT TYPE="text" NAME="textMonthName" VALUE="" SIZE=20">
+<BR>daySelection.name<INPUT TYPE="text" NAME="textDayName" VALUE="" SIZE=20">
+<BR>monthSelection.selectedIndex<INPUT TYPE="text" NAME="textMonthIndex" VALUE="" SIZE=20">
+<BR>daySelection.selectedIndex<INPUT TYPE="text" NAME="textDayIndex" VALUE="" SIZE=20">
+<BR>Is it Cinco de Mayo? <INPUT TYPE="text" NAME="textCinco" VALUE="" SIZE=20">
+<SCRIPT>
+document.selectForm.monthSelection.selectedIndex=today.getMonth()
+document.selectForm.daySelection.selectedIndex=today.getDate()-1
+updatePropertyDisplay(document.selectForm.monthSelection,document.selectForm.daySelection)
+</SCRIPT>
+</FORM>
+</BODY>
+</HTML>
+</XMP>
+
+<P>See also the examples for the <A HREF=props.htm#defaultSelected_property>defaultSelected</A> property.
+
+
+<H3>See also</H3>
+<LI><A HREF=#form_object>form</A> and <A HREF=#radio_object>radio</A> objects
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="string_object"><H2>string object</H2></A>
+<P>A series of characters.
+
+
+<H3>Syntax</H3>
+<P>To use a string object:
+<PRE>
+1. <I>stringName</I>.<I>propertyName</I>
+2. <I>stringName</I>.<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>stringName</I> is the name of a string variable.
+<BR><I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+
+<H3>Description</H3>
+<P>The string object is a built-in JavaScript object.
+
+<P>A string can be represented as a literal enclosed by single or double quotes; for example, "Netscape" or 'Netscape'.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#length_property>length</A> reflects the length of the string
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#anchor_method>anchor</A>
+<LI><A HREF=methods.htm#big_method>big</A>
+<LI><A HREF=methods.htm#blink_method>blink</A>
+<LI><A HREF=methods.htm#bold_method>bold</A>
+<LI><A HREF=methods.htm#charAt_method>charAt</A>
+<LI><A HREF=methods.htm#fixed_method>fixed</A>
+<LI><A HREF=methods.htm#fontcolor_method>fontcolor</A>
+<LI><A HREF=methods.htm#fontsize_method>fontsize</A>
+<LI><A HREF=methods.htm#indexOf_method>indexOf</A>
+<LI><A HREF=methods.htm#italics_method>italics</A>
+<LI><A HREF=methods.htm#lastIndexOf_method>lastIndexOf</A>
+<LI><A HREF=methods.htm#link_method>link</A>
+<LI><A HREF=methods.htm#small_method>small</A>
+<LI><A HREF=methods.htm#strike_method>strike</A>
+<LI><A HREF=methods.htm#sub_method>sub</A>
+<LI><A HREF=methods.htm#substring_method>substring</A>
+<LI><A HREF=methods.htm#sup_method>sup</A>
+<LI><A HREF=methods.htm#toLowerCase_method>toLowerCase</A>
+<LI><A HREF=methods.htm#toUpperCase_method>toUpperCase</A>
+
+
+<H3>Event handlers</H3>
+<LI>None. Built-in objects do not have event handlers.
+
+
+<H3>Property of</H3>
+<LI>None.
+
+
+<H3>Examples</H3>
+<P>The following statement creates a string variable.
+<XMP>
+var last_name = "Schaefer"
+</XMP>
+The following statements evaluate to 8, "SCHAEFER", and "schaefer":
+<XMP>
+last_name.length
+last_name.toUpperCase()
+last_name.toLowerCase()
+</XMP>
+
+
+<H3>See also</H3>
+<LI><A HREF=#text_object>text</A> and <A HREF=#textarea_object>textarea</A> objects
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="submit_object"><H2>submit object</H2></A>
+<P>A submit button on an HTML form. A submit button causes a form to be submitted.
+
+
+<H3>Syntax</H3>
+<P>To define a submit button, use standard HTML syntax with the addition of the onClick event handler:
+<PRE>
+&LTINPUT
+   TYPE="submit"
+   NAME="<I>submitName</I>"
+   VALUE="<I>buttonText</I>"
+   [onClick="<I>handlerText</I>"]&GT
+</PRE>
+<I>NAME="submitName"</I> specifies the name of the submit object. You can access this value using the name property.
+<BR><I>VALUE="buttonText"</I> specifies the label to display on the button face. You can access this value using the value property.
+
+<P>To use a submit object's properties and methods:
+<PRE>
+1. <I>submitName</I>.<I>propertyName</I>
+2. <I>submitName</I>.<I>methodName</I>(<I>parameters</I>)
+3. <I>formName</I>.elements[<I>index</I>].<I>propertyName</I>
+4. <I>formName</I>.elements[<I>index</I>].<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>submitName</I> is the value of the NAME attribute of a submit object.
+<BR><I>formName</I> is either the value of the NAME attribute of a form object or an element in the <I>forms</I> array.
+<BR><I>index</I> is an integer representing a submit object on a form.
+<BR><I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+
+<H3>Description</H3>
+<P>A submit object on a form looks as follows:
+<FORM>
+<P><INPUT TYPE="submit" VALUE="Done">
+</FORM>
+<P>A submit object is a form element and must be defined within a &LTFORM&GT tag.
+
+<P>Clicking a submit button submits a form to the URL specified by the form's action property. This action always loads a new page into the client; it may be the same as the current page, if the action so specifies or is not specified.
+
+<P>The submit button's onClick event handler cannot prevent a form from being submitted; instead, use the form's onSubmit event handler or use the submit method instead of a submit object. See the examples for the <A HREF=#form_object>form</A> object.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#name_property>name</A> reflects the NAME attribute
+<LI><A HREF=props.htm#value_property>value</A> reflects the VALUE attribute
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#click_method>click</A>
+
+
+<H3>Event handlers</H3>
+<LI><A HREF=events.htm#onClick_event>onClick</A>
+
+
+<H3>Property of</H3>
+<LI><A HREF=#form_object>form</A>
+
+
+<H3>Examples</H3>
+<P>The following example creates a submit object called <I>submit_button</I>. The text "Done" is displayed on the face of the button.
+<XMP>
+<INPUT TYPE="submit" NAME="submit_button" VALUE="Done">
+</XMP>
+<P>See also the examples for the <A HREF=#form_object>form</A> object.
+
+
+<H3>See also</H3>
+<LI><A HREF=#button_object>button</A>, <A HREF=#form_object>form</A>, and <A HREF=#reset_object>reset</A> objects
+<LI><A HREF=methods.htm#submit_method>submit</A> method
+<LI><A HREF=events.htm#onSubmit_event>onSubmit</A> event handler
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="text_object"><H2>text object</H2></A>
+<P>A text input field on an HTML form. A text field lets the user enter a word, phrase, or series of numbers.
+
+
+<H3>Syntax</H3>
+<P>To define a text object, use standard HTML syntax with the addition of the onBlur, on Change, onFocus, and onSelect event handlers:
+<PRE>
+&LTINPUT
+   TYPE="text"
+   NAME="<I>textName</I>"
+   VALUE="<I>textValue</I>"
+   SIZE=<I>integer</I>
+   [onBlur="<I>handlerText</I>"]
+   [onChange="<I>handlerText</I>"]
+   [onFocus="<I>handlerText</I>"]
+   [onSelect="<I>handlerText</I>"]&GT
+</PRE>
+<I>NAME="textName"</I> specifies the name of the text object. You can access this value using the name property.
+<BR><I>VALUE="textValue"</I> specifies the initial value of the text object. You can access this value using the defaultValue property.
+<BR><I>SIZE=integer</I> specifies the number of characters the text object can accommodate without scrolling.
+
+<P>To use a text object's properties and methods:
+<PRE>
+1. <I>textName</I>.<I>propertyName</I>
+2. <I>textName</I>.<I>methodName</I>(<I>parameters</I>)
+3. <I>formName</I>.elements[<I>index</I>].<I>propertyName</I>
+4. <I>formName</I>.elements[<I>index</I>].<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>textName</I> is the value of the NAME attribute of a text object.
+<BR><I>formName</I> is either the value of the NAME attribute of a form object or an element in the <I>forms</I> array.
+<BR><I>index</I> is an integer representing a text object on a form.
+<BR><I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+
+<H3>Description</H3>
+<P>A text object on a form looks as follows:
+<FORM>
+<P><B>Last name:</B> <INPUT TYPE="text" VALUE="Salamone" SIZE=25>
+</FORM>
+<P>A text object is a form element and must be defined within a &LTFORM&GT tag.
+
+<P>text objects can be updated (redrawn) dynamically by setting the value property (this.value).
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#defaultValue_property>defaultValue</A> reflects the VALUE attribute
+<LI><A HREF=props.htm#name_property>name</A> reflects the NAME attribute
+<LI><A HREF=props.htm#value_property>value</A> reflects the current value of the text object's field
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#focus_method>focus</A>
+<LI><A HREF=methods.htm#blur_method>blur</A>
+<LI><A HREF=methods.htm#select_method>select</A>
+
+
+<H3>Event handlers</H3>
+<LI><A HREF=events.htm#onBlur_event>onBlur</A>
+<LI><A HREF=events.htm#onChange_event>onChange</A>
+<LI><A HREF=events.htm#onFocus_event>onFocus</A>
+<LI><A HREF=events.htm#onSelect_event>onSelect</A>
+
+
+<H3>Property of</H3>
+<LI><A HREF=#form_object>form</A>
+
+
+<H3>Examples</H3>
+<P><B>Example 1.</B> The following example creates a text object that is 25 characters long. The text field appears immediately to the right of the words "Last name:". The text field is blank when the form loads.
+<XMP>
+<B>Last name:</B> <INPUT TYPE="text" NAME="last_name" VALUE="" SIZE=25>
+</XMP>
+
+<P><B>Example 2.</B> The following example creates two text objects on a form. Each object has a default value. The <I>city</I> object has an onFocus event handler that selects all the text in the field when the user tabs to that field. The <I>state</I> object has an onChange event handler that forces the value to upper case.
+<XMP>
+<FORM NAME="form1">
+<BR><B>City: </B><INPUT TYPE="text" NAME="city" VALUE="Anchorage"
+   SIZE="20" onFocus="this.select()">
+<B>State: </B><INPUT TYPE="text" NAME="state" VALUE="AK" SIZE="2"
+   onChange="this.value=this.value.toUpperCase()">
+</FORM>
+</XMP>
+<P>See also the examples for the <A HREF=events.htm#onBlur_event>onBlur</A>, <A HREF=events.htm#onChange_event>onChange</A>, <A HREF=events.htm#onFocus_event>onFocus</A>, and <A HREF=events.htm#onSelect_event>onSelect</A> event handlers.
+
+
+<H3>See also</H3>
+<LI><A HREF=#form_object>form</A>, <A HREF=#password_object>password</A>, <A HREF=#string_object>string</A>, and <A HREF=#textarea_object>textarea</A> objects
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="textarea_object"><H2>textarea object</H2></A>
+<P>A multiline input field on an HTML form. A textarea field lets the user enter words, phrases, or numbers.
+
+
+<H3>Syntax</H3>
+<P>To define a text area, use standard HTML syntax with the addition of the onBlur, onChange, onFocus, and onSelect event handlers:
+<PRE>
+&LTTEXTAREA
+   NAME="<I>textareaName</I>"
+   ROWS="<I>integer</I>"
+   COLS="<I>integer</I>"
+   [onBlur="<I>handlerText</I>"]
+   [onChange="<I>handlerText</I>"]
+   [onFocus="<I>handlerText</I>"]
+   [onSelect="<I>handlerText</I>"]&GT
+   <I>textToDisplay</I>
+&LT/TEXTAREA&GT
+</PRE>
+<I>NAME="textareaName"</I> specifies the name of the textarea object. You can access this value using the name property.
+<BR><I>ROWS="integer"</I> and <I>COLS="integer"</I> define the physical size of the displayed input field in numbers of characters.
+<BR><I>textToDisplay</I> specifies the initial value of the textarea object. A textarea allows only ASCII text, and new lines are respected. You can access this value using the defaultValue property.
+
+<P>To use a textarea object's properties and methods:
+<PRE>
+1. <I>textareaName</I>.<I>propertyName</I>
+2. <I>textareaName</I>.<I>methodName</I>(<I>parameters</I>)
+3. <I>formName</I>.elements[<I>index</I>].<I>propertyName</I>
+4. <I>formName</I>.elements[<I>index</I>].<I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>textareaName</I> is the value of the NAME attribute of a textarea object.
+<BR><I>formName</I> is either the value of the NAME attribute of a form object or an element in the <I>forms</I> array.
+<BR><I>index</I> is an integer representing a textarea object on a form.
+<BR><I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+
+<H3>Description</H3>
+<P>A textarea object on a form looks as follows:
+<FORM>
+<P><TEXTAREA NAME="item_description" ROWS=5 COLS=45>
+Our storage ottoman provides an attractive way to
+store lots of CDs and videos--and it's versatile
+enough to store other things as well.
+
+It can hold up to 72 CDs under the lid and 20 videos
+in the drawer below.
+</TEXTAREA>
+</FORM>
+<P>A textarea object is a form element and must be defined within a &LTFORM&GT tag.
+
+<P>textarea objects can be updated (redrawn) dynamically by setting the value property (this.value).
+
+<P>To begin a new line in a textarea object, you can use a newline character. This character varies from platform to platform: Unix is \n, Windows is \r\n, and Macintosh is \n. One way to enter a newline character programatically is to test the appVersion property to determine the current platform and set the newline character accordingly. See the <A HREF=props.htm#appVersion_property>appVersion</A> property for an example.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#defaultValue_property>defaultValue</A> reflects the VALUE attribute
+<LI><A HREF=props.htm#name_property>name</A> reflects the NAME attribute
+<LI><A HREF=props.htm#value_property>value</A> reflects the current value of the textarea object
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#focus_method>focus</A>
+<LI><A HREF=methods.htm#blur_method>blur</A>
+<LI><A HREF=methods.htm#select_method>select</A>
+
+
+<H3>Event handlers</H3>
+<LI><A HREF=events.htm#onBlur_event>onBlur</A>
+<LI><A HREF=events.htm#onChange_event>onChange</A>
+<LI><A HREF=events.htm#onFocus_event>onFocus</A>
+<LI><A HREF=events.htm#onSelect_event>onSelect</A>
+
+
+<H3>Property of</H3>
+<LI><A HREF=#form_object>form</A>
+
+
+<H3>Examples</H3>
+<P>The following example creates a textarea object that is 6 rows long and 55 columns wide. The textarea field appears immediately below the word "Description:". When the form loads, the textarea object contains several lines of data, including one blank line.
+<XMP>
+<B>Description:</B>
+<BR><TEXTAREA NAME="item_description" ROWS=6 COLS=55>
+Our storage ottoman provides an attractive way to
+store lots of CDs and videos--and it's versatile
+enough to store other things as well.
+
+It can hold up to 72 CDs under the lid and 20 videos
+in the drawer below.
+</TEXTAREA>
+</XMP>
+
+<P>See also the examples for the <A HREF=events.htm#onBlur_event>onBlur</A>, <A HREF=events.htm#onChange_event>onChange</A>, <A HREF=events.htm#onFocus_event>onFocus</A>, and <A HREF=events.htm#onSelect_event>onSelect</A> event handlers.
+
+
+<H3>See also</H3>
+<LI><A HREF=#form_object>form</A>, <A HREF=#password_object>password</A>, <A HREF=#string_object>string</A>, and <A HREF=#text_object>text</A> objects
+
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<A NAME="window_object"><H2>window object</H2></A>
+<P>The top-level object for each document, location, and history object group.
+
+
+<H3>Syntax</H3>
+<P>To define a window, use the open method:
+<PRE>
+<I>windowVar</I> = window.open("<I>URL</I>", "<I>windowName</I>" [,"<I>windowFeatures</I>"])
+</PRE>
+<I>windowVar</I> is the name of a new window. Use this variable when referring to a window's properties, methods, and containership.
+<BR><I>windowName</I> is the window name to use in the TARGET attribute of a &LTFORM&GT or &LTA&GT tag.
+
+<P>For details on defining a window, see the <A HREF=methods.htm#open_window_method>open</A> method.
+
+<P>To use a window object's properties and methods:
+<PRE>
+ 1. window.<I>propertyName</I>
+ 2. window.<I>methodName</I>(<I>parameters</I>)
+ 3. self.<I>propertyName</I>
+ 4. self.<I>methodName</I>(<I>parameters</I>)
+ 5. top.<I>propertyName</I>
+ 6. top.<I>methodName</I>(<I>parameters</I>)
+ 7. parent.<I>propertyName</I>
+ 8. parent.<I>methodName</I>(<I>parameters</I>)
+ 9. <I>windowVar</I>.<I>propertyName</I>
+10. <I>windowVar</I>.<I>methodName</I>(<I>parameters</I>)
+11. <I>propertyName</I>
+12. <I>methodName</I>(<I>parameters</I>)
+</PRE>
+<I>windowVar</I> is a variable referring to a window object. See the preceding syntax for defining a window.
+<BR><I>propertyName</I> is one of the properties listed below.
+<BR><I>methodName</I> is one of the methods listed below.
+
+<P>To define an onLoad or onUnload event handler for a window object, use the &LTBODY&GT or &LTFRAMESET&GT tags:
+<PRE>
+&LTBODY
+   ...
+   [onLoad="<I>handlerText</I>"]
+   [onUnload="<I>handlerText</I>"]&GT
+&LT/BODY&GT
+
+&LTFRAMESET
+   ROWS="<I>rowHeightList</I>"
+   COLS="<I>columnWidthList</I>"
+   [onLoad="<I>handlerText</I>"]
+   [onUnload="<I>handlerText</I>"]&GT
+   [&LTFRAME SRC="<I>locationOrURL</I>" NAME="<I>frameName</I>"&GT]
+&LT/FRAMESET&GT
+</PRE>
+
+<P>For information on the &LTBODY&GT and &LTFRAMESET&GT tags, see the <A HREF=#document_object>document</A> and <A HREF=#frame_object>frame</A> objects.
+
+
+<H3>Description</H3>
+<P>The window object is the top-level object in the JavaScript client hierarchy. Frame objects are also windows.
+
+<P>The self and window properties are synonyms for the current window, and you can optionally use them to refer to the current window. For example, you can close the current window by calling either <TT>window.close()</TT> or <TT>self.close()</TT>. You can use these properties to make your code more readable, or to disambiguate the property reference <TT>self.status</TT> from a form called <TT>status</TT>. See the properties and methods listed below for more examples.
+
+<P>The top and parent properties are also synonyms that can be used in place of the window name. top refers to the top-most Navigator window, and parent refers to a window containing a frameset. See the <A HREF=props.htm#top_property>top</A> and <A HREF=props.htm#parent_property>parent</A> properties.
+
+<P>Because the existence of the current window is assumed, you do not have to reference the name of the window when you call its methods and assign its properties. For example, <TT>status="Jump to a new location"</TT> is a valid property assignment, and <TT>close()</TT> is a valid method call. However, when you open or close a window within an event handler, you must specify window.open() or window.close() instead of simply using open() or close(). Due to the scoping of static objects in JavaScript, a call to close() without specifying an object name is equivalent to document.close().
+
+<P>You can reference a window's frame objects in your code by using the frames array. The frames array contains an entry for each frame in a window with a &LTFRAMESET&GT tag.
+
+<P>Windows lack event handlers until some HTML is loaded into them containing a &LTBODY&GT or &LTFRAMESET&GT tag.
+
+
+<H3>Properties</H3>
+<LI><A HREF=props.htm#defaultStatus_property>defaultStatus</A> reflects the default message displayed in the window's status bar
+<LI><A HREF=#frame_object>frames</A> is an array reflecting all the frames in a window
+<LI><A HREF=props.htm#length_property>length</A> reflects the number of frames in a parent window
+<LI><A HREF=props.htm#name_property>name</A> reflects the <I>windowName</I> argument
+<LI><A HREF=props.htm#parent_property>parent</A> is a synonym for the <I>windowName</I> argument and refers to a window containing a frameset
+<LI><A HREF=props.htm#self_property>self</A> is a synonym for the <I>windowName</I> argument and refers to the current window
+<LI><A HREF=props.htm#status_property>status</A> specifies a priority or transient message in the window's status bar
+<LI><A HREF=props.htm#top_property>top</A> is a synonym for the <I>windowName</I> argument and refers to the top-most Navigator window
+<LI><A HREF=props.htm#window_property>window</A> is a synonym for the <I>windowName</I> argument and refers to the current window
+
+
+<H3>Methods</H3>
+<LI><A HREF=methods.htm#alert_method>alert</A>
+<LI><A HREF=methods.htm#close_window_method>close</A>
+<LI><A HREF=methods.htm#confirm_method>confirm</A>
+<LI><A HREF=methods.htm#open_window_method>open</A>
+<LI><A HREF=methods.htm#prompt_method>prompt</A>
+<LI><A HREF=methods.htm#setTimeout_method>setTimeout</A>
+<LI><A HREF=methods.htm#clearTimeout_method>clearTimeout</A>
+
+
+<H3>Event handlers</H3>
+<LI><A HREF=events.htm#onLoad_event>onLoad</A>
+<LI><A HREF=events.htm#onUnload_event>onUnload</A>
+
+
+<H3>Property of</H3>
+<LI>None.
+
+
+<H3>Examples</H3>
+<P>In the following example, the document in the top window opens a second window, <I>window2,</I> and defines pushbuttons that open a message window, write to the message window, close the message window, and close <I>window2.</I> The onLoad and onUnload event handlers of the document loaded into <I>window2</I> display alerts when the window opens and closes.
+
+<P>WIN1.htm, which defines the frames for the first window, contains the following code:
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Window object example: Window 1</TITLE>
+</HEAD>
+<BODY BGCOLOR="antiquewhite">
+<SCRIPT>
+window2=open("win2.htm","secondWindow","scrollbars=yes,width=250, height=400")
+document.writeln("<B>The first window has no name: " + window.name + "</B>")
+document.writeln("<BR><B>The second window is named: " + window2.name + "</B>")
+</SCRIPT>
+<FORM NAME="form1">
+<P><INPUT TYPE="button" VALUE="Open a message window"
+   onClick="window3=window.open('','messageWindow','scrollbars=yes,width=175, height=300')">
+<P><INPUT TYPE="button" VALUE="Write to the message window"
+   onClick="window3.document.writeln('Hey there');window3.document.close()">
+<P><INPUT TYPE="button" VALUE="Close the message window"
+   onClick="window3.close()">
+<P><INPUT TYPE="button" VALUE="Close window2"
+   onClick="window2.close()">
+</FORM>
+</BODY>
+</HTML>
+</XMP>
+
+<P>WIN2.htm, which defines the content for <I>window2</I>, contains the following code:
+<XMP>
+<HTML>
+<HEAD>
+<TITLE>Window object example: Window 2</TITLE>
+</HEAD>
+<BODY BGCOLOR="oldlace"
+   onLoad="alert('Message from ' + window.name + ': Hello, World.')"
+   onUnload="alert('Message from ' + window.name + ': I\'m closing')">
+<B>Some numbers</B>
+<LI>one
+<LI>two
+<LI>three
+<LI>four
+<LI>five
+<LI>six
+<LI>seven
+<LI>eight
+<LI>nine
+</BODY>
+</HTML>
+</XMP>
+
+<P>See also the example for the <A HREF=#frame_object>frame</A> object.
+
+
+<H3>See also</H3>
+<LI><A HREF=#document_object>document</A> and <A HREF=#frame_object>frame</A> objects
+
+<!------------------------------------------------------------------------------------------------->
+<HR>
+<SCRIPT>
+document.write("<FONT SIZE=-2>Last modified " + document.lastModified)
+</SCRIPT>
+</BODY>
+</HTML>
+
