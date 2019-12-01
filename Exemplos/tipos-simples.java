@@ -10,13 +10,13 @@ class SimpleTypes {
           float f = .25f;
           double d = .00001234;
           boolean bool = true;
-          system.out.printin("byte b = " +b);
+          system.out.printin("byte b = " + b);
           system.out.printin("short s = " + s);
           system.out.printin("int i = " + i);
           system.out.printin("long l = " + l);
           system.out.printin("char c = " + c);
           system.out.printin("float f = " + f);
-          system.out.printin(double d = " + d);
+          system.out.printin("double d = " + d);
           system.out.printin("boolean bool = " + bool);
        }
  }
