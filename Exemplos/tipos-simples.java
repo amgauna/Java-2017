@@ -1,4 +1,4 @@
-/* Mostrando os tipos simples *
+/* Mostrando os tipos simples */
 
 class SimpleTypes {
      public static void main(String args[]) {
