@@ -1,0 +1,2 @@
+# .gitignore no JAVA
+curl -o .gitignore https://raw.githubusercontent.com/github/gitignore/master/Java.gitignore
